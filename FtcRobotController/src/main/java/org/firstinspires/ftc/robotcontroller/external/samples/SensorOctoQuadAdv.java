@@ -87,7 +87,6 @@ public class SensorOctoQuadAdv extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         // Connect to the OctoQuad by looking up its name in the hardwareMap.
         OctoQuad octoquad = hardwareMap.get(OctoQuad.class, "octoquad");
-
         // Create the interface for the Swerve Drive Encoders
         OctoSwerveDrive octoSwerveDrive = new OctoSwerveDrive(octoquad);
 
@@ -152,7 +151,6 @@ class OctoSwerveDrive {
 
     public OctoSwerveDrive(OctoQuad octoquad) {
         this.octoquad = octoquad;
-
         // Clear out all prior settings and encoder data before setting up desired configuration
         octoquad.resetEverything();
 
