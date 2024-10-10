@@ -27,13 +27,12 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.firstinspires.ftc.teamcode.src;
+package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
@@ -51,80 +50,66 @@ import com.qualcomm.robotcore.util.Range;
  * Remove or comment out the @Disabled line to add this OpMode to the Driver Station OpMode list
  */
 
-@TeleOp(name="Basic: Linear OpMode", group="Linear OpMode")
-//@Disabled
-public class AlanYuanMecanum extends LinearOpMode {
+@TeleOp(name="MecanumCallum", group="Linear OpMode")
+public class MecanumCallum extends LinearOpMode {
 
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
-    private DcMotor frontLeftDrive = null;
-    private DcMotor frontRightDrive = null;
-    private DcMotor backLeftDrive = null;
-    private DcMotor backRightDrive = null;
+    // a way to track how long the robot is running^
+
+
+    //Motors for
 
     @Override
     public void runOpMode() {
         telemetry.addData("Status", "Initialized");
         telemetry.update();
 
-         AlanYuanServo servo = new AlanYuanServo(hardwareMap, Servo.Direction.FORWARD);
-
-
         // Initialize the hardware variables. Note that the strings used here as parameters
         // to 'get' must correspond to the names assigned during the robot configuration
         // step (using the FTC Robot Controller app on the phone).
-        frontLeftDrive  = hardwareMap.get(DcMotor.class, "fl_drive"); //0
-        frontRightDrive = hardwareMap.get(DcMotor.class, "fr_drive"); //2
-        backLeftDrive = hardwareMap.get(DcMotor.class, "bl_drive"); //1
-        backRightDrive = hardwareMap.get(DcMotor.class, "br_drive"); //3
+        DcMotor frontLeftDrive = hardwareMap.dcMotor.get("frontLeftMotor"); //0
+        DcMotor frontRightDrive = hardwareMap.dcMotor.get("frontRightMotor"); //2
+        DcMotor backLeftDrive = hardwareMap.dcMotor.get("backLeftMotor"); //1
+        DcMotor backRightDrive = hardwareMap.dcMotor.get("backRightMotor"); //3
 
         // To drive forward, most robots need the motor on one side to be reversed, because the axles point in opposite directions.
         // Pushing the left stick forward MUST make robot go forward. So adjust these two lines based on your first test drive.
         // Note: The settings here assume direct drive on left and right wheels.  Gear Reduction or 90 Deg drives may require direction flips
-        frontLeftDrive.setDirection(DcMotor.Direction.REVERSE);
-        frontRightDrive.setDirection(DcMotor.Direction.FORWARD);
-        backLeftDrive.setDirection(DcMotor.Direction.REVERSE);
-        backRightDrive.setDirection(DcMotor.Direction.FORWARD);
-
-        // Wait for the game to start (driver presses START)
+        frontLeftDrive.setDirection(DcMotorSimple.Direction.REVERSE);
+        backLeftDrive.setDirection(DcMotorSimple.Direction.REVERSE);
+        frontRightDrive.setDirection(DcMotorSimple.Direction.FORWARD);
+        backRightDrive.setDirection(DcMotorSimple.Direction.FORWARD);
+        // Wait for the game to start (driver presses PLAY)
         waitForStart();
         runtime.reset();
 
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
+            float y = -gamepad1.left_stick_y;
+            float x = (float) (gamepad1.left_stick_x * 1.05);
+            float rx = gamepad1.right_stick_x;
 
             // Setup a variable for each drive wheel to save power level for telemetry
-            double frontLeftPower;
-            double backLeftPower;
-            double frontRightPower;
-            double backRightPower;
-
             // Choose to drive using either Tank Mode, or POV Mode
             // Comment out the method that's not used.  The default below is POV.
 
-            // POV Mode uses left stick to go forward, and right stick to turn.
-            // - This uses basic math to combine motions and is easier to drive straight.
-            double y = -gamepad1.left_stick_y;
-            double x = gamepad1.left_stick_x;
-            double rx  =  gamepad1.right_stick_x;
+            float denominator = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(rx), 1);
+            float frontLeftPower = (y + x + rx) / denominator;
+            float backLeftPower = (y - x + rx) / denominator;
+            float frontRightPower = (y - x - rx) / denominator;
+            float backRightPower = (y + x - rx) / denominator;
 
-            // Tank Mode uses one stick to control each wheel.
-            // - This requires no math, but it is hard to drive forward slowly and keep straight.
-            // leftPower  = -gamepad1.left_stick_y ;
-            // rightPower = -gamepad1.right_stick_y ;
+            frontLeftDrive.setPower(frontLeftPower);
+            backLeftDrive.setPower(backLeftPower);
+            frontRightDrive.setPower(frontRightPower);
+            backRightDrive.setPower(backRightPower);
 
-            // Send calculated power to wheels
-            frontLeftDrive.setPower(y + x + rx);
-            backLeftDrive.setPower(y - x + rx);
-            frontRightDrive.setPower(y - x - rx);
-            backRightDrive.setPower(y + x - rx);
 
             // Show the elapsed game time and wheel power.
             telemetry.addData("Status", "Run Time: " + runtime.toString());
-            telemetry.addData("Motors", "frontLeft (%.2f), backLeft (%.2f), frontRight (%.2f), backRight (%.2f)", frontLeftDrive.getPower(), backLeftDrive.getPower(), frontRightDrive.getPower(), backRightDrive.getPower());
+            telemetry.addData("Motors", "left (%.2f), right (%.2f)", frontLeftPower, backLeftPower, frontRightPower, backRightPower);
             telemetry.update();
-
-            servo.openClose(gamepad2, telemetry);
         }
     }
 }
