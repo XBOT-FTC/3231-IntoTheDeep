@@ -32,6 +32,7 @@ package org.firstinspires.ftc.teamcode.src;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.Blinker;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -67,7 +68,7 @@ public class AlanYuanMecanum extends LinearOpMode {
         telemetry.addData("Status", "Initialized");
         telemetry.update();
 
-         AlanYuanServo servo = new AlanYuanServo(hardwareMap, Servo.Direction.FORWARD);
+         //AlanYuanServo servo = new AlanYuanServo(hardwareMap, Servo.Direction.FORWARD);
 
 
         // Initialize the hardware variables. Note that the strings used here as parameters
@@ -92,6 +93,20 @@ public class AlanYuanMecanum extends LinearOpMode {
 
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
+
+            frontLeftDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            frontLeftDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            frontRightDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            frontRightDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            backLeftDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            backLeftDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            backRightDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            backRightDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+            double FLposition = frontLeftDrive.getCurrentPosition();
+            double FRposition = frontRightDrive.getCurrentPosition();
+            double BLposition = backLeftDrive.getCurrentPosition();
+            double BRposition = backRightDrive.getCurrentPosition();
 
             // Setup a variable for each drive wheel to save power level for telemetry
             double frontLeftPower;
@@ -120,11 +135,12 @@ public class AlanYuanMecanum extends LinearOpMode {
             backRightDrive.setPower(y + x - rx);
 
             // Show the elapsed game time and wheel power.
+            telemetry.addData("Encoder", "frontLeft (%.2f), backLeft (%.2f), frontRight (%.2f), backRight (%.2f)", FLposition, FRposition, BLposition, BRposition);
             telemetry.addData("Status", "Run Time: " + runtime.toString());
             telemetry.addData("Motors", "frontLeft (%.2f), backLeft (%.2f), frontRight (%.2f), backRight (%.2f)", frontLeftDrive.getPower(), backLeftDrive.getPower(), frontRightDrive.getPower(), backRightDrive.getPower());
             telemetry.update();
 
-            servo.openClose(gamepad2, telemetry);
+            //servo.openClose(gamepad2, telemetry);
         }
     }
 }
