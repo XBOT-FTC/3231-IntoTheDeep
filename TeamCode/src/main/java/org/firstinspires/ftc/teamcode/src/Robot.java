@@ -9,6 +9,7 @@ public class Robot extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
+        AlanYuanMecanum drive = new AlanYuanMecanum();
         Intaker intaker = new Intaker(hardwareMap, telemetry);
         Claw claw = new Claw(hardwareMap, telemetry);
 
@@ -18,5 +19,6 @@ public class Robot extends LinearOpMode {
         while(opModeIsActive()) {
             intaker.startIntaker(gamepad1, telemetry);
             claw.powerServo(gamepad1, telemetry);
+            drive.runOpMode();
         }
 }}
