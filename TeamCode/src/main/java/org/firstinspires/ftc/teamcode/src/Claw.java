@@ -14,7 +14,7 @@ public class Claw {
     double closePosition = 0;
     boolean grabMode = false;
 
-    public Claw(HardwareMap hardwareMap) {
+    public Claw(HardwareMap hardwareMap, Telemetry telemetry) {
         clawServo = hardwareMap.get(Servo.class, "clawServo");
         this.buttonPress = false;
     }
