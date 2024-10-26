@@ -42,9 +42,9 @@ import org.firstinspires.ftc.robotcore.internal.camera.delegating.DelegatingCapt
  * the autonomous or the teleop period of an Fh * Remove or comment out the @Disabled line to add this OpMode to the Driver Station OpMode list
  */
 
-@Autonomous(name="Ascent Zone: Forward", group="Linear OpMode")
+@Autonomous(name="Observation Zone", group="Linear OpMode")
 //@Disabled
-public class AlanYuanAuto2 extends LinearOpMode {
+public class ObservationZoneAuto extends LinearOpMode {
 
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
