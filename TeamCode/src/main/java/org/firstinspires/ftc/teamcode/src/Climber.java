@@ -103,4 +103,8 @@ public class Climber {
     public void setTicksRateOfChange(int ticks) {
         this.ticksRateOfChange = ticks;
     }
+
+    public void setMaxExtensionTicks(int maxTicks) {
+        this.maxExtensionTicks = maxTicks;
+    }
 }
