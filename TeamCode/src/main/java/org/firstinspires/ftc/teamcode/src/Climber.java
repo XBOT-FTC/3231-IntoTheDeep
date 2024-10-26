@@ -35,9 +35,14 @@ public class Climber {
         this.telemetry = telemetry;
     }
 
+    public void controls(Gamepad gamepad) {
+        detectMode(gamepad);
+        climb(gamepad);
+    }
+
     public void detectMode(Gamepad gamepad) {
         // Toggles between manual and auto mode
-        if (gamepad.a) {
+        if (gamepad.a && !manualToggle) {
             manualToggle = true;
         }
         if (!gamepad.a && manualToggle) {
