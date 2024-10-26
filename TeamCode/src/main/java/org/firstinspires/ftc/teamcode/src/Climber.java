@@ -38,6 +38,11 @@ public class Climber {
     public void controls(Gamepad gamepad) {
         detectMode(gamepad);
         climb(gamepad);
+
+        telemetry.addData("Manual Mode", manual);
+        telemetry.addData("Climber Current Position", this.climberMotor.getCurrentPosition());
+        telemetry.addData("Climber Target Position", this.climberMotor.getTargetPosition());
+        telemetry.update();
     }
 
     public void detectMode(Gamepad gamepad) {
@@ -76,6 +81,7 @@ public class Climber {
         }
         this.climberMotor.setTargetPosition(targetPosition);
         this.climberMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        this.climberMotor.setPower(this.power);
 
         // If the target and current is within a threshold, set power to 0
         if (Math.abs(climberMotor.getTargetPosition() -
@@ -88,5 +94,13 @@ public class Climber {
         this.levelOne = levelOne;
         this.levelTwo = levelTwo;
         this.levelThree = levelThree;
+    }
+
+    public void setMotorPower(double power) {
+        this.power = power;
+    }
+
+    public void setTicksRateOfChange(int ticks) {
+        this.ticksRateOfChange = ticks;
     }
 }
