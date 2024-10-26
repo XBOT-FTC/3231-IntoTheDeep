@@ -22,16 +22,22 @@ public class Intaker {
     }
 
     public void setPowerToIntaker(Gamepad gamepad, Telemetry telemetry) {
+        telemetry.addLine("Testing");
         if (gamepad.right_trigger > 0) {
             intakerServo.setPower(spinPower);
             telemetry.addLine("Intaker status is FORWARD");
+            telemetry.addData("Intaker power", intakerServo.getPower());
         } else if (gamepad.left_trigger > 0) {
             intakerServo.setPower(negativeSpinPower);
             telemetry.addLine("Intaker status is BACKWARD");
+            telemetry.addData("Intaker power", intakerServo.getPower());
         } else {
             intakerServo.setPower(neutralPower);
             telemetry.addLine("Intaker status is NEUTRAL NO POWER");
+            telemetry.addData("Intaker power", intakerServo.getPower());
         }
+
+        telemetry.update();
 
     }
 }

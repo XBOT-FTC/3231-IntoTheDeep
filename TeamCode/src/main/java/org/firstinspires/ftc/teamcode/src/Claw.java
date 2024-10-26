@@ -10,8 +10,8 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 public class Claw {
     Servo clawServo = null;
     boolean buttonPress;
-    double openPosition = 1;
-    double closePosition = 0;
+    double openPosition = 0;
+    double closePosition = 1;
     boolean grabMode = false;
 
     public Claw(HardwareMap hardwareMap, Telemetry telemetry) {
@@ -24,7 +24,7 @@ public class Claw {
     }
 
     public void controlServo(Gamepad gamepad, Telemetry telemetry) {
-        if (gamepad.a) {
+        if (gamepad.x) {
             if (!buttonPress) {
                 buttonPress= true;
             }
@@ -34,14 +34,19 @@ public class Claw {
                 grabMode = !grabMode;
             }
         }
-        this.setServo();
+        this.setServo(telemetry);
+
     }
 
-    public void setServo() {
+    public void setServo(Telemetry telemetry) {
         if (grabMode) {
             clawServo.setPosition(openPosition);
+            telemetry.addLine("OPEN");
         } else {
             clawServo.setPosition(closePosition);
+            telemetry.addLine("CLOSE");
         }
+
+        telemetry.update();
     }
 }
