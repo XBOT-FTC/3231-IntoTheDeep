@@ -52,7 +52,7 @@ import com.qualcomm.robotcore.util.Range;
  * Remove or comment out the @Disabled line to add this OpMode to the Driver Station OpMode list
  */
 
-@TeleOp(name="Basic: Linear OpMode", group="Linear OpMode")
+@TeleOp(name="AlanMecanum", group="Linear OpMode")
 //@Disabled
 public class AlanYuanMecanum extends LinearOpMode {
 
@@ -62,6 +62,9 @@ public class AlanYuanMecanum extends LinearOpMode {
     private DcMotor frontRightDrive = null;
     private DcMotor backLeftDrive = null;
     private DcMotor backRightDrive = null;
+
+    boolean precisionToggle = false;
+    boolean pressed = false;
 
     @Override
     public void runOpMode() {
@@ -75,9 +78,9 @@ public class AlanYuanMecanum extends LinearOpMode {
         // to 'get' must correspond to the names assigned during the robot configuration
         // step (using the FTC Robot Controller app on the phone).
         frontLeftDrive  = hardwareMap.get(DcMotor.class, "fl_drive"); //0
-        frontRightDrive = hardwareMap.get(DcMotor.class, "fr_drive"); //2
+        frontRightDrive = hardwareMap.get(DcMotor.class, "fr_drive"); //3
         backLeftDrive = hardwareMap.get(DcMotor.class, "bl_drive"); //1
-        backRightDrive = hardwareMap.get(DcMotor.class, "br_drive"); //3
+        backRightDrive = hardwareMap.get(DcMotor.class, "br_drive"); //2
 
         // To drive forward, most robots need the motor on one side to be reversed, because the axles point in opposite directions.
         // Pushing the left stick forward MUST make robot go forward. So adjust these two lines based on your first test drive.
@@ -87,6 +90,11 @@ public class AlanYuanMecanum extends LinearOpMode {
         backLeftDrive.setDirection(DcMotor.Direction.REVERSE);
         backRightDrive.setDirection(DcMotor.Direction.FORWARD);
 
+        /*frontLeftDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        frontRightDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        backLeftDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        backRightDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);*/
+
         // Wait for the game to start (driver presses START)
         waitForStart();
         runtime.reset();
@@ -94,17 +102,9 @@ public class AlanYuanMecanum extends LinearOpMode {
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
 
-            frontLeftDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            frontLeftDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-            frontRightDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            frontRightDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-            backLeftDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            backLeftDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-            backRightDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            backRightDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-
             double FLposition = frontLeftDrive.getCurrentPosition();
             double FRposition = frontRightDrive.getCurrentPosition();
+
             double BLposition = backLeftDrive.getCurrentPosition();
             double BRposition = backRightDrive.getCurrentPosition();
 
@@ -127,12 +127,27 @@ public class AlanYuanMecanum extends LinearOpMode {
             // - This requires no math, but it is hard to drive forward slowly and keep straight.
             // leftPower  = -gamepad1.left_stick_y ;
             // rightPower = -gamepad1.right_stick_y ;
+            if (gamepad1.a == true && pressed == false) {
+                precisionToggle = !precisionToggle;
+                pressed = true;
+            }
+            else {
+                pressed = false;
+            }
 
             // Send calculated power to wheels
-            frontLeftDrive.setPower(y + x + rx);
-            backLeftDrive.setPower(y - x + rx);
-            frontRightDrive.setPower(y - x - rx);
-            backRightDrive.setPower(y + x - rx);
+            if (precisionToggle) {
+                frontLeftDrive.setPower((y + x + rx) * 0.5);
+                backLeftDrive.setPower((y - x + rx) * 0.5);
+                frontRightDrive.setPower((y - x - rx) * 0.5);
+                backRightDrive.setPower((y + x - rx) * 0.5);
+            }
+            else {
+                frontLeftDrive.setPower(y + x + rx);
+                backLeftDrive.setPower(y - x + rx);
+                frontRightDrive.setPower(y - x - rx);
+                backRightDrive.setPower(y + x - rx);
+            }
 
             // Show the elapsed game time and wheel power.
             telemetry.addData("Encoder", "frontLeft (%.2f), backLeft (%.2f), frontRight (%.2f), backRight (%.2f)", FLposition, FRposition, BLposition, BRposition);
