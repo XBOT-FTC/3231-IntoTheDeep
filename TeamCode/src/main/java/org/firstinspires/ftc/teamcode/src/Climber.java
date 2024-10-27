@@ -47,10 +47,10 @@ public class Climber {
 
     public void detectMode(Gamepad gamepad) {
         // Toggles between manual and auto mode
-        if (gamepad.a && !manualToggle) {
+        if (gamepad.x && !manualToggle) {
             manualToggle = true;
         }
-        if (!gamepad.a && manualToggle) {
+        if (!gamepad.x && manualToggle) {
             manual = !manual; // flips the mode
             manualToggle = false;
         }

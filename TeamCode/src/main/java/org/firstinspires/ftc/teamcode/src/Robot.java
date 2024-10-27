@@ -10,6 +10,9 @@ public class Robot extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
 //        AlanYuanMecanum drive = new AlanYuanMecanum();
+        MecanumDrive mecanumDrive = new MecanumDrive(hardwareMap, telemetry);
+        mecanumDrive.setPrecisionPower(0.25);
+
         Intaker intaker = new Intaker(hardwareMap, telemetry);
 
         Claw claw = new Claw(hardwareMap, telemetry);
