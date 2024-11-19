@@ -52,7 +52,6 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
  * Remove or comment out the @Disabled line to add this OpMode to the Driver Station OpMode list
  */
 
-@TeleOp(name="AlanMecanum", group="Linear OpMode")
 //@Disabled
 
 public class MecanumDrive {
@@ -64,38 +63,42 @@ public class MecanumDrive {
     private DcMotor backLeftDrive = null;
     private DcMotor backRightDrive = null;
 
+
     boolean precisionToggle = false;
     boolean pressed = false;
     double precisionPower = 1;
-
+    double defaultSpeed = 1;
     Telemetry telemetry;
 
+    private double strafeConstant = 1;
+
     public MecanumDrive(HardwareMap hardwareMap, Telemetry telemetry) {
-        this.frontLeftDrive  = hardwareMap.get(DcMotor.class, "fl_drive"); //0
-        this.frontRightDrive = hardwareMap.get(DcMotor.class, "fr_drive"); //3
-        this.backLeftDrive = hardwareMap.get(DcMotor.class, "bl_drive"); //1
-        this.backRightDrive = hardwareMap.get(DcMotor.class, "br_drive"); //2
+        this.frontLeftDrive  = hardwareMap.get(DcMotor.class, "fl_drive");
+        this.frontRightDrive = hardwareMap.get(DcMotor.class, "fr_drive");
+        this.backLeftDrive = hardwareMap.get(DcMotor.class, "bl_drive");
+        this.backRightDrive = hardwareMap.get(DcMotor.class, "br_drive");
 
         this.frontLeftDrive.setDirection(DcMotor.Direction.REVERSE);
         this.frontRightDrive.setDirection(DcMotor.Direction.FORWARD);
         this.backLeftDrive.setDirection(DcMotor.Direction.REVERSE);
         this.backRightDrive.setDirection(DcMotor.Direction.FORWARD);
 
+        this.frontLeftDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        this.frontRightDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        this.backLeftDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        this.backRightDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+
+
         this.telemetry = telemetry;
     }
 
     public void drive(Gamepad gamepad) {
-        double FLposition = frontLeftDrive.getCurrentPosition();
-        double FRposition = frontRightDrive.getCurrentPosition();
+        double y = -gamepad.left_stick_y; // Remember, Y stick is reversed!
+        double x = gamepad.left_stick_x * strafeConstant; // Counteract imperfect strafing
+        double rx = gamepad.right_stick_x;
 
-        double BLposition = backLeftDrive.getCurrentPosition();
-        double BRposition = backRightDrive.getCurrentPosition();
-
-        double y = -gamepad.left_stick_y;
-        double x = gamepad.left_stick_x;
-        double rx  =  gamepad.right_stick_x;
-
-        if (gamepad.a == true && pressed == false) {
+        if (gamepad.a && pressed == false) {
             precisionToggle = !precisionToggle;
             pressed = true;
         }
@@ -103,28 +106,42 @@ public class MecanumDrive {
             pressed = false;
         }
 
+        double denominator = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(rx), 1);
+        double frontLeftPower = (y + x + rx) / denominator;
+        double backLeftPower = (y - x + rx) / denominator;
+        double frontRightPower = (y - x - rx) / denominator;
+        double backRightPower = (y + x - rx) / denominator;
+
         // Send calculated power to wheels
         if (precisionToggle) {
-            frontLeftDrive.setPower((y + x + rx) * precisionPower);
-            backLeftDrive.setPower((y - x + rx) * precisionPower);
-            frontRightDrive.setPower((y - x - rx) * precisionPower);
-            backRightDrive.setPower((y + x - rx) * precisionPower);
+            frontLeftDrive.setPower(frontLeftPower * precisionPower);
+            backLeftDrive.setPower(backLeftPower * precisionPower);
+            frontRightDrive.setPower(frontRightPower * precisionPower);
+            backRightDrive.setPower(backRightPower * precisionPower);
         }
         else {
-            frontLeftDrive.setPower(y + x + rx);
-            backLeftDrive.setPower(y - x + rx);
-            frontRightDrive.setPower(y - x - rx);
-            backRightDrive.setPower(y + x - rx);
+            frontLeftDrive.setPower(frontLeftPower * defaultSpeed);
+            backLeftDrive.setPower(backLeftPower * defaultSpeed);
+            frontRightDrive.setPower(frontRightPower * defaultSpeed);
+            backRightDrive.setPower(backRightPower * defaultSpeed);
         }
 
         // Show the elapsed game time and wheel power.
 //        telemetry.addData("Encoder", "frontLeft (%.2f), backLeft (%.2f), frontRight (%.2f), backRight (%.2f)", FLposition, FRposition, BLposition, BRposition);
         telemetry.addData("Status", "Run Time: " + runtime.toString());
         telemetry.addData("Motors", "frontLeft (%.2f), backLeft (%.2f), frontRight (%.2f), backRight (%.2f)", frontLeftDrive.getPower(), backLeftDrive.getPower(), frontRightDrive.getPower(), backRightDrive.getPower());
-        telemetry.update();
+        telemetry.addData("Gamepad","y: (%.2f), x: (%.2f), rx: (%.2f)", y, x, rx);
 
     }
     public void setPrecisionPower(double power) {
         this.precisionPower = power;
+    }
+
+    public void setStrafeConstant(double constant) {
+        this.strafeConstant = constant;
+    }
+
+    public void setDefaultSpeed(double speed) {
+        this.defaultSpeed = speed;
     }
 }

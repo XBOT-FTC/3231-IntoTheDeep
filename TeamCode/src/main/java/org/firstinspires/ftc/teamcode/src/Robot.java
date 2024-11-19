@@ -2,47 +2,48 @@ package org.firstinspires.ftc.teamcode.src;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
+
+import org.firstinspires.ftc.teamcode.lib.LinearSlide;
+import org.firstinspires.ftc.teamcode.lib.Swivel;
 
 
-@TeleOp(name="Testing intake and claw", group="Linear Opmode")
+@TeleOp(name="TESTING NEW!! :)", group="Linear Opmode")
 public class Robot extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-//        AlanYuanMecanum drive = new AlanYuanMecanum();
-        MecanumDrive mecanumDrive = new MecanumDrive(hardwareMap, telemetry);
-        mecanumDrive.setPrecisionPower(0.25);
 
-        Intaker intaker = new Intaker(hardwareMap, telemetry);
+        MecanumDrive mecanumDrive = new MecanumDrive(hardwareMap, telemetry);
+        mecanumDrive.setPrecisionPower(0.75);
+        mecanumDrive.setStrafeConstant(1.1);
+        mecanumDrive.setDefaultSpeed(1.0);
 
         Claw claw = new Claw(hardwareMap, telemetry);
-
-        Climber climber = new Climber(hardwareMap, telemetry);
-        climber.setClimbPosition(500, 1000, 1500);
-        climber.setTicksRateOfChange(100);
-        climber.setMotorPower(1.0);
-        climber.setMaxExtensionTicks(20000);
-
-        Lifter lifter = new Lifter(hardwareMap, telemetry);
-        lifter.setClimbPosition(1000, 2000, 3000);
-        lifter.setTicksRateOfChange(200);
-        lifter.setMotorPower(0.5);
-        lifter.setMaxExtensionTicks(10000);
-
-        Slider slider = new Slider(hardwareMap, telemetry);
-        slider.setClimbPosition(1000, 2000, 3000);
-        slider.setTicksRateOfChange(5);
-        slider.setMotorPower(0.5);
-        slider.setMaxExtensionTicks(10000);
+//
+        Swivel swivel = new Swivel(hardwareMap, DcMotorSimple.Direction.FORWARD);
+        swivel.setSwivelPower(1);
+        swivel.setMaxPosition(3000);
+        swivel.setTickChange(300);
+        swivel.setSpeedModeLimiter(0.5);
+        swivel.setScoringPosition(1200);
+        swivel.setDefaultPowerPercentage(1);
+//
+        LinearSlide linearSlide = new LinearSlide(hardwareMap, DcMotorSimple.Direction.FORWARD);
+        linearSlide.setSlidePower(1);
+        linearSlide.setMaxPosition(3200);
+        linearSlide.setTickChange(200);
+        linearSlide.setSpeedModeLimiter(1);
+        linearSlide.setScoringPosition(2000);
+        linearSlide.setDefaultPowerPercentage(1.0);
 
         waitForStart();
 
         while(opModeIsActive()) {
-            intaker.startIntaker(gamepad2, telemetry);
             claw.powerServo(gamepad2, telemetry);
-//            drive.runOpMode();
-            climber.controls(gamepad1);
-            lifter.controls(gamepad2);
-            slider.controls(gamepad2);
+            mecanumDrive.drive(gamepad1);
+            linearSlide.slide(gamepad2, telemetry);
+            swivel.swivel(gamepad2, telemetry);
+            telemetry.update();
         }
-}}
+    }}

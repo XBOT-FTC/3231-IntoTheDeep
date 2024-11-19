@@ -10,8 +10,8 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 public class Claw {
     Servo clawServo = null;
     boolean buttonPress;
-    double openPosition = 0.45;
-    double closePosition = 1;
+    double openPosition = 0.5;
+    double closePosition = 0;
     boolean grabMode = false;
 
     public Claw(HardwareMap hardwareMap, Telemetry telemetry) {
