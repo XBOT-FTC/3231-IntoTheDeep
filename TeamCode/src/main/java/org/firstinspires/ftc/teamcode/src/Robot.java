@@ -41,7 +41,6 @@ public class Robot extends LinearOpMode {
         swivel.setHangingPosition(650);
         swivel.setBasketPosition(1500);
         swivel.setIntakeUpPosition(200);
-        swivel.setIntakeGroundPosition(50);
         swivel.setZeroPosition(0);
 
 //

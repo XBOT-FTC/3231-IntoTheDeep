@@ -47,4 +47,12 @@ public class Claw {
             telemetry.addLine("CLOSE");
         }
     }
+
+    public void open() {
+        clawServo.setPosition(openPosition);
+    }
+
+    public void close() {
+        clawServo.setPosition(closePosition);
+    }
 }

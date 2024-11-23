@@ -160,10 +160,6 @@ public class NewSwivel {
         intakeUpPosition = position;
     }
 
-    public void setIntakeGroundPosition(int position) {
-        intakeGroundPosition = position;
-    }
-
     public void setZeroPosition(int position) {
         zeroPosition = position;
     }
