@@ -13,16 +13,21 @@ public class NewSwivel {
     public int maxPosition = 0;
     public double power = 0;
     public int tickChange = 0;
-    public boolean precisionMode = false;
-    public int position = 0;
+    public int positionPreset = 0;
+    public int positionManual = 0;
     public int hangingPosition = 0;
     public int basketPosition = 0;
     public int intakeUpPosition = 0;
     public int intakeGroundPosition = 0;
+    public int zeroPosition = 0;
+
     public boolean dpadUpPress = false;
     public boolean dpadDownPress = false;
     public boolean dpadLeftPress = false;
     public boolean dpadRightPress = false;
+
+    public boolean manualMode = false;
+    public boolean aPress = false;
 
 
     public NewSwivel(HardwareMap hardwareMap, DcMotorSimple.Direction direction) {
@@ -35,14 +40,29 @@ public class NewSwivel {
     }
 
     public void swivel(Gamepad gamepad, Telemetry telemetry) {
-        swivelToPosition(setScoringPosition(gamepad), telemetry);
+        toggleManualMode(gamepad);
+        swivelToPresetPosition(setScoringPosition(gamepad), telemetry, gamepad);
+    }
+
+    public boolean toggleManualMode(Gamepad gamepad) {
+        if (gamepad.a) {
+            if (!aPress) {
+                aPress = true;
+            }
+        } else {
+            if (aPress) {
+                aPress = false;
+                manualMode = !manualMode;
+            }
+        }
+        return manualMode;
     }
 
     public int setScoringPosition(Gamepad gamepad) {
         if (gamepad.dpad_up) {
             if (!dpadUpPress) {
                 dpadUpPress = true;
-                position = hangingPosition;
+                positionPreset = hangingPosition;
             }
         } else {
             if (dpadUpPress) {
@@ -53,7 +73,7 @@ public class NewSwivel {
         if (gamepad.dpad_down) {
             if (!dpadDownPress) {
                 dpadDownPress = true;
-                position = intakeUpPosition;
+                positionPreset = zeroPosition;
             }
         } else {
             if (dpadDownPress) {
@@ -64,7 +84,7 @@ public class NewSwivel {
         if (gamepad.dpad_left) {
             if (!dpadLeftPress) {
                 dpadLeftPress = true;
-                position = basketPosition;
+                positionPreset = basketPosition;
             }
         } else {
             if (dpadLeftPress) {
@@ -75,7 +95,7 @@ public class NewSwivel {
         if (gamepad.dpad_right) {
             if (!dpadRightPress) {
                 dpadRightPress = true;
-                position = intakeGroundPosition;
+                positionPreset = intakeUpPosition;
             }
         } else {
             if (dpadRightPress) {
@@ -83,22 +103,38 @@ public class NewSwivel {
             }
         }
 
-        return position;
+        return positionPreset;
     }
 
-    public void swivelToPosition(int scoringPosition, Telemetry telemetry) {
-        swivel.setTargetPosition(scoringPosition);
-        swivel.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        swivel.setPower(power); 
+    public void swivelToPresetPosition(int scoringPosition, Telemetry telemetry, Gamepad gamepad) {
+        if (manualMode) {
+            swivelToPositionManual(gamepad);
+        } else {
+            swivel.setTargetPosition(scoringPosition);
+            swivel.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            swivel.setPower(power);
+        }
 
         int currentPosition = swivel.getCurrentPosition();
         telemetry.addData("Current Swivel Position", currentPosition);
-        telemetry.addData("Swivel Goal Position", position);
-        telemetry.addData("Swivel Precision Mode Status", precisionMode);
+        telemetry.addData("Swivel Goal Position", scoringPosition);
         telemetry.addData("Swivel Power", power);
         telemetry.addData("Actual Power", swivel.getPower());
     }
 
+    public void swivelToPositionManual(Gamepad gamepad) {
+        if (gamepad.right_trigger > 0) {
+            positionManual += tickChange;
+            positionManual = Math.min(positionManual, maxPosition);
+        } else if (gamepad.left_trigger > 0) {
+            positionManual -= tickChange;
+            positionManual = Math.max(positionManual, 0);
+        }
+
+        swivel.setTargetPosition(positionManual);
+        swivel.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        swivel.setPower(power);
+    }
 
     public void setSwivelPower(double power) {
         this.power = power;
@@ -126,5 +162,9 @@ public class NewSwivel {
 
     public void setIntakeGroundPosition(int position) {
         intakeGroundPosition = position;
+    }
+
+    public void setZeroPosition(int position) {
+        zeroPosition = position;
     }
 }

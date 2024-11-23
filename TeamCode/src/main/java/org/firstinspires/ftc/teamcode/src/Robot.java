@@ -4,8 +4,9 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
-import org.firstinspires.ftc.teamcode.lib.LinearSlide;
+//import org.firstinspires.ftc.teamcode.lib.LinearSlide;
 //import org.firstinspires.ftc.teamcode.lib.Swivel;
+import org.firstinspires.ftc.teamcode.lib.NewLinearSlide;
 import org.firstinspires.ftc.teamcode.lib.NewSwivel;
 
 
@@ -41,22 +42,31 @@ public class Robot extends LinearOpMode {
         swivel.setBasketPosition(1500);
         swivel.setIntakeUpPosition(200);
         swivel.setIntakeGroundPosition(50);
+        swivel.setZeroPosition(0);
 
 //
-        LinearSlide linearSlide = new LinearSlide(hardwareMap, DcMotorSimple.Direction.FORWARD);
+//        LinearSlide linearSlide = new LinearSlide(hardwareMap, DcMotorSimple.Direction.FORWARD);
+//        linearSlide.setSlidePower(1);
+//        linearSlide.setMaxPosition(3200);
+//        linearSlide.setTickChange(200);
+//        linearSlide.setSpeedModeLimiter(1);
+//        linearSlide.setScoringPosition(3000);
+//        linearSlide.setDefaultPowerPercentage(1.0);
+
+        NewLinearSlide linearSlide = new NewLinearSlide(hardwareMap, DcMotorSimple.Direction.FORWARD);
         linearSlide.setSlidePower(1);
-        linearSlide.setMaxPosition(3200);
+        linearSlide.setMaxPosition(3000);
         linearSlide.setTickChange(200);
-        linearSlide.setSpeedModeLimiter(1);
-        linearSlide.setScoringPosition(3000);
-        linearSlide.setDefaultPowerPercentage(1.0);
+        linearSlide.setBasketPosition(2750);
+        linearSlide.setHangingPosition(1000);
+        linearSlide.setZeroPosition(0);
 
         waitForStart();
 
         while(opModeIsActive()) {
             claw.powerServo(gamepad2, telemetry);
             mecanumDrive.drive(gamepad1);
-            linearSlide.slide(gamepad2, telemetry);
+            linearSlide.slide(gamepad1, telemetry);
             swivel.swivel(gamepad2, telemetry);
             telemetry.update();
         }

@@ -46,7 +46,5 @@ public class Claw {
             clawServo.setPosition(closePosition);
             telemetry.addLine("CLOSE");
         }
-
-        telemetry.update();
     }
 }
