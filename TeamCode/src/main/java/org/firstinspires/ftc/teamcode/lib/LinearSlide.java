@@ -69,7 +69,6 @@ public class LinearSlide {
         linearSlideLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         linearSlideRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        // TODO: need to be reviewed.
         // logic for toggle on-off of the linear slide to go back to zero.
         if (position == 0 && !scoringBool) {
             if (linearSlideLeft.getCurrentPosition() != 0) {

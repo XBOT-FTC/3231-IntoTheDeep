@@ -5,7 +5,8 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 import org.firstinspires.ftc.teamcode.lib.LinearSlide;
-import org.firstinspires.ftc.teamcode.lib.Swivel;
+//import org.firstinspires.ftc.teamcode.lib.Swivel;
+import org.firstinspires.ftc.teamcode.lib.NewSwivel;
 
 
 @TeleOp(name="TESTING NEW!! :)", group="Linear Opmode")
@@ -21,20 +22,33 @@ public class Robot extends LinearOpMode {
 
         Claw claw = new Claw(hardwareMap, telemetry);
 //
-        Swivel swivel = new Swivel(hardwareMap, DcMotorSimple.Direction.FORWARD);
+//        Swivel swivel = new Swivel(hardwareMap, DcMotorSimple.Direction.FORWARD);
+//        swivel.setSwivelPower(1);
+//        swivel.setMaxPosition(3000);
+//        swivel.setTickChange(300);
+//        swivel.setSpeedModeLimiter(0.5);
+//        swivel.setDefaultPowerPercentage(1);
+//
+//        swivel.setHangingPosition(1000);
+//        swivel.setBasketPosition(1750);
+//        swivel.setIntakeUpPosition(300);
+
+        NewSwivel swivel = new NewSwivel(hardwareMap, DcMotorSimple.Direction.FORWARD);
         swivel.setSwivelPower(1);
-        swivel.setMaxPosition(3000);
         swivel.setTickChange(300);
-        swivel.setSpeedModeLimiter(0.5);
-        swivel.setScoringPosition(1200);
-        swivel.setDefaultPowerPercentage(1);
+        swivel.setMaxPosition(3000);
+        swivel.setHangingPosition(650);
+        swivel.setBasketPosition(1500);
+        swivel.setIntakeUpPosition(200);
+        swivel.setIntakeGroundPosition(50);
+
 //
         LinearSlide linearSlide = new LinearSlide(hardwareMap, DcMotorSimple.Direction.FORWARD);
         linearSlide.setSlidePower(1);
         linearSlide.setMaxPosition(3200);
         linearSlide.setTickChange(200);
         linearSlide.setSpeedModeLimiter(1);
-        linearSlide.setScoringPosition(2000);
+        linearSlide.setScoringPosition(3000);
         linearSlide.setDefaultPowerPercentage(1.0);
 
         waitForStart();
