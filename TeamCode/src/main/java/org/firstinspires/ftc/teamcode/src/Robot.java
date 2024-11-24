@@ -17,7 +17,7 @@ public class Robot extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
 
         MecanumDrive mecanumDrive = new MecanumDrive(hardwareMap, telemetry);
-        mecanumDrive.setPrecisionPower(0.5);
+        mecanumDrive.setPrecisionPower(0.3);
         mecanumDrive.setStrafeConstant(1.1);
         mecanumDrive.setDefaultSpeed(1.0);
 
@@ -36,7 +36,7 @@ public class Robot extends LinearOpMode {
 
         NewSwivel swivel = new NewSwivel(hardwareMap, DcMotorSimple.Direction.FORWARD);
         swivel.setSwivelPower(0.5);
-        swivel.setTickChange(40);
+        swivel.setTickChange(125);
         swivel.setMaxPosition(3000);
         swivel.setSpecimenPosition(1400);
         swivel.setBasketPosition(1440);

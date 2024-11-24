@@ -119,7 +119,6 @@ public class NewSwivel {
             telemetry.addLine("WITHIN 25 ticks SWIVEL");
         }
 
-        swivel.getCurrentPosition();
         int currentPosition = swivel.getCurrentPosition();
         telemetry.addData("Current Swivel Position", currentPosition);
         telemetry.addData("Swivel Goal Position", scoringPosition);
@@ -134,6 +133,11 @@ public class NewSwivel {
         } else if (gamepad.left_trigger > 0) {
             positionManual -= tickChange;
             positionManual = Math.max(positionManual, 0);
+        }
+
+        if (Math.abs(swivel.getCurrentPosition()) < 25) {
+            swivel.setPower(0);
+            telemetry.addLine("WITHIN 25 ticks SWIVEL MANUAL");
         }
 
         swivel.setTargetPosition(positionManual);

@@ -30,6 +30,8 @@ public class NewLinearSlide {
     public int zeroPosition = 0;
     public int maxPositionDown = 0;
 
+    private int maxExtensionSlides = 0;
+
     public boolean dpadUpPress = false;
     public boolean dpadLeftPress = false;
     public boolean dpadDownPress = false;
@@ -110,7 +112,6 @@ public class NewLinearSlide {
                 dpadDownPress = false;
             }
         }
-
         return positionPreset;
     }
 
@@ -132,18 +133,18 @@ public class NewLinearSlide {
             linearSlideLeft.setPower(power);
             linearSlideRight.setPower(power);
 
-            if (Math.abs(scoringPosition - linearSlideRight.getCurrentPosition()) < 25) {
-                if (Math.abs(scoringPosition - linearSlideLeft.getCurrentPosition()) < 25) {
-                    linearSlideLeft.setPower(0);
-                    linearSlideRight.setPower(0);
-                    telemetry.addLine("WITHIN 25 ticks LINEAR SLIDES");
-                }
+            if (Math.abs(scoringPosition - linearSlideRight.getCurrentPosition()) < 25 || Math.abs(scoringPosition - linearSlideLeft.getCurrentPosition()) < 25) {
+                linearSlideLeft.setPower(0);
+                linearSlideRight.setPower(0);
+                telemetry.addLine("WITHIN 25 TICKS LINEAR SLIDES");
             }
 
             int currentPositionLeft = linearSlideLeft.getCurrentPosition();
             int currentPositionRight = linearSlideRight.getCurrentPosition();
             telemetry.addData("Current Left Slide Position", currentPositionLeft);
             telemetry.addData("Current Right Slide Position", currentPositionRight);
+            telemetry.addData("Target Left Slide Position", linearSlideLeft.getTargetPosition());
+            telemetry.addData("Target Right Slide Position", linearSlideRight.getTargetPosition());
             telemetry.addData("Slide Goal Position", scoringPosition);
             telemetry.addData("Linear Slide Power", power);
             telemetry.addData("Linear Slide left Actual Power", linearSlideLeft.getPower());
@@ -166,6 +167,7 @@ public class NewLinearSlide {
             positionManual = Math.max(positionManual, 0);
         }
 
+
         linearSlideLeft.setTargetPosition(-positionManual);
         linearSlideRight.setTargetPosition(-positionManual);
         linearSlideLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -173,10 +175,19 @@ public class NewLinearSlide {
         linearSlideLeft.setPower(power);
         linearSlideRight.setPower(power);
 
+        if (positionManual == 0 &&
+                Math.abs(linearSlideLeft.getCurrentPosition()) < 25 || Math.abs(linearSlideRight.getCurrentPosition()) < 25) {
+            linearSlideLeft.setPower(0);
+            linearSlideRight.setPower(0);
+            telemetry.addLine("LEFT OR RIGHT SLIDE ZERO-ED");
+        }
+
         int currentPositionLeft = linearSlideLeft.getCurrentPosition();
         int currentPositionRight = linearSlideRight.getCurrentPosition();
         telemetry.addData("Current Left Slide Position", currentPositionLeft);
         telemetry.addData("Current Right Slide Position", currentPositionRight);
+        telemetry.addData("Target Left Slide Position", linearSlideLeft.getTargetPosition());
+        telemetry.addData("Target Right Slide Position", linearSlideRight.getTargetPosition());
         telemetry.addData("Slide Goal Position", scoringPosition);
         telemetry.addData("Linear Slide Power", power);
         telemetry.addData("Right trigger SLIDES", gamepad.right_trigger);
