@@ -50,13 +50,11 @@ public class Claw {
         telemetry.addData("Current pos Claw", clawServo.getPosition());
 
     }
+    public void open() {
+        clawServo.setPosition(openPosition);
+    }
 
-//
-//    public void open() {
-//        clawServo.setPosition(openPosition);
-//    }
-//
-//    public void close() {
-//        clawServo.setPosition(closePosition);
-//    }
+    public void close() {
+        clawServo.setPosition(closePosition);
+    }
 }
