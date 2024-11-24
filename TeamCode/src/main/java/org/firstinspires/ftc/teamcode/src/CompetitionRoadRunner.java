@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.src;
 
+import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
@@ -16,6 +17,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
+import org.firstinspires.ftc.teamcode.MecanumDrive;
 import org.firstinspires.ftc.teamcode.lib.NewLinearSlide;
 import org.firstinspires.ftc.teamcode.lib.NewSwivel;
 
@@ -35,7 +37,6 @@ public class CompetitionRoadRunner extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
 
-        MecanumDrive drive = new MecanumDrive(hardwareMap, telemetry);
         Claw claw = new Claw(hardwareMap, telemetry);
 
         NewSwivel swivel = new NewSwivel(hardwareMap, DcMotorSimple.Direction.FORWARD);
@@ -56,6 +57,39 @@ public class CompetitionRoadRunner extends LinearOpMode {
         linearSlide.setZeroPosition(0);
         linearSlide.setMaxPositionForDown(2775);
 
-        waitForStart();
+        Pose2d initialPose = new Pose2d(0, 0, Math.toRadians(0)); // TODO: CHANGE THIS
+        MecanumDrive drive = new MecanumDrive(hardwareMap, initialPose);
+
+        TrajectoryActionBuilder tab = drive.actionBuilder(initialPose)
+                .setTangent(Math.toRadians(90))
+                .splineToSplineHeading(new Pose2d(-9, -37, Math.toRadians(270)), Math.toRadians(90))
+                .waitSeconds(0.5)
+
+                //raise arm
+                .afterTime(0, new InstantAction(() -> {
+                    armSlidePosition = ArmSlide.SlidePositions.LOW_SPECIMEN;
+                }))
+                .build();
+
+        Action trajectoryAction = tab.build();
+
+        // Initialization
+        while (!isStopRequested() && !opModeIsActive()) {
+            telemetry.addData("Position during Init", 1);
+            telemetry.update();
+        }
+
+        if (isStopRequested()) return;
+
+        Actions.runBlocking(
+                new SequentialAction(
+//                        Example
+//                        trajectoryActionChosen,
+//                        lift.liftUp(),
+//                        claw.openClaw(),
+//                        lift.liftDown(),
+//                        trajectoryActionCloseOut
+                )
+        );
     }
 }
