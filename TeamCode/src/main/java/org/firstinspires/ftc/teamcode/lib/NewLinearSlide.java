@@ -1,11 +1,15 @@
 package org.firstinspires.ftc.teamcode.lib;
 
+import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.hardwareMap;
+
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.lib.NewSwivel;
+
 
 /* CONTROLS
    A: PRECISION MODE
@@ -24,6 +28,7 @@ public class NewLinearSlide {
     public int specimenPosition = 0;
     public int basketPosition = 0;
     public int zeroPosition = 0;
+    public int maxPositionDown = 0;
 
     public boolean dpadUpPress = false;
     public boolean dpadLeftPress = false;
@@ -31,6 +36,8 @@ public class NewLinearSlide {
 
     public boolean manualMode = false;
     public boolean aPress = false;
+//    NewSwivel swivel = new NewSwivel(hardwareMap, DcMotorSimple.Direction.FORWARD);
+
 
     public NewLinearSlide(HardwareMap hardwareMap, DcMotorSimple.Direction direction) {
         // motor for left linear slide, sets up encoders
@@ -48,11 +55,12 @@ public class NewLinearSlide {
         linearSlideRight.setTargetPosition(0);
         linearSlideRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         linearSlideRight.setDirection(direction.inverted());
+
     }
 
-    public void slide(Gamepad gamepad, Telemetry telemetry) {
+    public void slide(Gamepad gamepad, Telemetry telemetry, boolean swivelIsZero) {
         toggleManualMode(gamepad);
-        slideToPresetPosition(setScoringPosition(gamepad), telemetry, gamepad);
+        slideToPresetPosition(setScoringPosition(gamepad), telemetry, gamepad, swivelIsZero);
     }
 
     public boolean toggleManualMode(Gamepad gamepad) {
@@ -106,12 +114,19 @@ public class NewLinearSlide {
         return positionPreset;
     }
 
-    public void slideToPresetPosition(int scoringPosition, Telemetry telemetry, Gamepad gamepad) {
+    public void slideToPresetPosition(int scoringPosition, Telemetry telemetry, Gamepad gamepad, boolean swivelIsZero) {
         if (manualMode) {
-            slideToPositionManual(gamepad, telemetry);
+            slideToPositionManual(gamepad, telemetry, swivelIsZero);
         } else {
-            linearSlideLeft.setTargetPosition(-scoringPosition);
-            linearSlideRight.setTargetPosition(-scoringPosition);
+            if (swivelIsZero) {
+                linearSlideLeft.setTargetPosition(maxPositionDown);
+                linearSlideRight.setTargetPosition(maxPositionDown);
+            } else {
+                linearSlideLeft.setTargetPosition(-scoringPosition);
+                linearSlideRight.setTargetPosition(-scoringPosition);
+            }
+
+
             linearSlideLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             linearSlideRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             linearSlideLeft.setPower(power);
@@ -137,10 +152,15 @@ public class NewLinearSlide {
         }
     }
 
-    public void slideToPositionManual(Gamepad gamepad, Telemetry telemetry) {
+    public void slideToPositionManual(Gamepad gamepad, Telemetry telemetry, boolean swivelIsZero) {
         if (gamepad.right_trigger > 0) {
-            positionManual += tickChange;
-            positionManual = Math.min(positionManual, maxPosition);
+            if (swivelIsZero) {
+                positionManual += tickChange;
+                positionManual = Math.min(positionManual, maxPositionDown);
+            } else {
+                positionManual += tickChange;
+                positionManual = Math.min(positionManual, maxPosition);
+            }
         } else if (gamepad.left_trigger > 0) {
             positionManual -= tickChange;
             positionManual = Math.max(positionManual, 0);
@@ -173,6 +193,10 @@ public class NewLinearSlide {
 
     public void setMaxPosition(int maxTicks) {
         this.maxPosition = maxTicks;
+    }
+
+    public void setMaxPositionForDown(int maxTicks) {
+        this.maxPositionDown = maxTicks;
     }
 
     public void setPosition(int position) {

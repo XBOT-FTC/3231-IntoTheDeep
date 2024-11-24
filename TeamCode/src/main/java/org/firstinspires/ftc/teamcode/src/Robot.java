@@ -59,13 +59,15 @@ public class Robot extends LinearOpMode {
         linearSlide.setBasketPosition(3600);
         linearSlide.setSpecimenPosition(1440);
         linearSlide.setZeroPosition(0);
+        linearSlide.setMaxPositionForDown(2775);
 
         waitForStart();
 
         while(opModeIsActive()) {
             claw.powerServo(gamepad2, telemetry);
             mecanumDrive.drive(gamepad1);
-            linearSlide.slide(gamepad1, telemetry);
+            linearSlide.slide(gamepad1, telemetry, swivel
+                    .getSwivelIsZero());
             swivel.swivel(gamepad2, telemetry);
             telemetry.update();
         }

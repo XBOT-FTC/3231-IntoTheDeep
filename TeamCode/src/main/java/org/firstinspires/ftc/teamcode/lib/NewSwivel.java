@@ -35,6 +35,7 @@ public class NewSwivel {
         swivel.setTargetPosition(0);
         swivel.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         swivel.setDirection(direction);
+
     }
 
     public void swivel(Gamepad gamepad, Telemetry telemetry) {
@@ -118,6 +119,7 @@ public class NewSwivel {
             telemetry.addLine("WITHIN 25 ticks SWIVEL");
         }
 
+        swivel.getCurrentPosition();
         int currentPosition = swivel.getCurrentPosition();
         telemetry.addData("Current Swivel Position", currentPosition);
         telemetry.addData("Swivel Goal Position", scoringPosition);
@@ -173,5 +175,9 @@ public class NewSwivel {
 
     public void setZeroPosition(int position) {
         zeroPosition = position;
+    }
+
+    public boolean getSwivelIsZero() {
+        return swivel.getCurrentPosition() < 25;
     }
 }
