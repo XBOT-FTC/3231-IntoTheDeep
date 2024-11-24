@@ -63,7 +63,6 @@ public class MecanumDrive {
     private DcMotor backLeftDrive = null;
     private DcMotor backRightDrive = null;
 
-
     boolean precisionToggle = false;
     boolean pressed = false;
     double precisionPower = 1;
@@ -88,8 +87,6 @@ public class MecanumDrive {
         this.backLeftDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         this.backRightDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-
-
         this.telemetry = telemetry;
     }
 
@@ -98,7 +95,7 @@ public class MecanumDrive {
         double x = gamepad.left_stick_x * strafeConstant; // Counteract imperfect strafing
         double rx = gamepad.right_stick_x;
 
-        if (gamepad.a && pressed == false) {
+        if (gamepad.x && pressed == false) {
             precisionToggle = !precisionToggle;
             pressed = true;
         }
@@ -133,6 +130,7 @@ public class MecanumDrive {
         telemetry.addData("Gamepad","y: (%.2f), x: (%.2f), rx: (%.2f)", y, x, rx);
 
     }
+
     public void setPrecisionPower(double power) {
         this.precisionPower = power;
     }
