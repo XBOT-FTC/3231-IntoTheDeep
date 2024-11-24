@@ -15,10 +15,9 @@ public class NewSwivel {
     public int tickChange = 0;
     public int positionPreset = 0;
     public int positionManual = 0;
-    public int hangingPosition = 0;
+    public int specimenPosition = 0;
     public int basketPosition = 0;
     public int intakeUpPosition = 0;
-    public int intakeGroundPosition = 0;
     public int zeroPosition = 0;
 
     public boolean dpadUpPress = false;
@@ -28,7 +27,6 @@ public class NewSwivel {
 
     public boolean manualMode = false;
     public boolean aPress = false;
-
 
     public NewSwivel(HardwareMap hardwareMap, DcMotorSimple.Direction direction) {
         swivel = hardwareMap.get(DcMotor.class, "swivel");
@@ -62,7 +60,7 @@ public class NewSwivel {
         if (gamepad.dpad_up) {
             if (!dpadUpPress) {
                 dpadUpPress = true;
-                positionPreset = hangingPosition;
+                positionPreset = basketPosition;
             }
         } else {
             if (dpadUpPress) {
@@ -84,7 +82,7 @@ public class NewSwivel {
         if (gamepad.dpad_left) {
             if (!dpadLeftPress) {
                 dpadLeftPress = true;
-                positionPreset = basketPosition;
+                positionPreset = specimenPosition;
             }
         } else {
             if (dpadLeftPress) {
@@ -108,11 +106,16 @@ public class NewSwivel {
 
     public void swivelToPresetPosition(int scoringPosition, Telemetry telemetry, Gamepad gamepad) {
         if (manualMode) {
-            swivelToPositionManual(gamepad);
+            swivelToPositionManual(gamepad, telemetry);
         } else {
             swivel.setTargetPosition(scoringPosition);
             swivel.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             swivel.setPower(power);
+        }
+
+        if (Math.abs(scoringPosition - swivel.getCurrentPosition()) < 25) {
+            swivel.setPower(0);
+            telemetry.addLine("WITHIN 25 ticks SWIVEL");
         }
 
         int currentPosition = swivel.getCurrentPosition();
@@ -122,7 +125,7 @@ public class NewSwivel {
         telemetry.addData("Actual Power", swivel.getPower());
     }
 
-    public void swivelToPositionManual(Gamepad gamepad) {
+    public void swivelToPositionManual(Gamepad gamepad, Telemetry telemetry) {
         if (gamepad.right_trigger > 0) {
             positionManual += tickChange;
             positionManual = Math.min(positionManual, maxPosition);
@@ -134,6 +137,14 @@ public class NewSwivel {
         swivel.setTargetPosition(positionManual);
         swivel.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         swivel.setPower(power);
+
+        int currentPosition = swivel.getCurrentPosition();
+        telemetry.addData("Current Swivel Position", currentPosition);
+        telemetry.addData("Swivel Goal Position", positionManual);
+        telemetry.addData("Swivel Power", power);
+        telemetry.addData("Actual Power", swivel.getPower());
+        telemetry.addData("Right trigger SWIVEL", gamepad.right_trigger);
+        telemetry.addData("Left trigger SWIVEL", gamepad.left_trigger);
     }
 
     public void setSwivelPower(double power) {
@@ -148,8 +159,8 @@ public class NewSwivel {
         this.maxPosition = maxTicks;
     }
 
-    public void setHangingPosition(int position) {
-        hangingPosition = position;
+    public void setSpecimenPosition(int position) {
+        specimenPosition = position;
     }
 
     public void setBasketPosition(int position) {

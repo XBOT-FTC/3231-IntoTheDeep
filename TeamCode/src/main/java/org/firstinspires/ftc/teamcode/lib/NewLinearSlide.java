@@ -21,7 +21,7 @@ public class NewLinearSlide {
     public int positionPreset = 0;
     public int positionManual = 0;
     public int scoringPosition = 0;
-    public int hangingPosition = 0;
+    public int specimenPosition = 0;
     public int basketPosition = 0;
     public int zeroPosition = 0;
 
@@ -31,7 +31,6 @@ public class NewLinearSlide {
 
     public boolean manualMode = false;
     public boolean aPress = false;
-
 
     public NewLinearSlide(HardwareMap hardwareMap, DcMotorSimple.Direction direction) {
         // motor for left linear slide, sets up encoders
@@ -74,7 +73,7 @@ public class NewLinearSlide {
         if (gamepad.dpad_up) {
             if (!dpadUpPress) {
                 dpadUpPress = true;
-                positionPreset = hangingPosition;
+                positionPreset = basketPosition;
             }
         } else {
             if (dpadUpPress) {
@@ -85,7 +84,7 @@ public class NewLinearSlide {
         if (gamepad.dpad_left) {
             if (!dpadLeftPress) {
                 dpadLeftPress = true;
-                positionPreset = basketPosition;
+                positionPreset = specimenPosition;
             }
         } else {
             if (dpadLeftPress) {
@@ -109,7 +108,7 @@ public class NewLinearSlide {
 
     public void slideToPresetPosition(int scoringPosition, Telemetry telemetry, Gamepad gamepad) {
         if (manualMode) {
-            slideToPositionManual(gamepad);
+            slideToPositionManual(gamepad, telemetry);
         } else {
             linearSlideLeft.setTargetPosition(-scoringPosition);
             linearSlideRight.setTargetPosition(-scoringPosition);
@@ -118,16 +117,27 @@ public class NewLinearSlide {
             linearSlideLeft.setPower(power);
             linearSlideRight.setPower(power);
 
+            if (Math.abs(scoringPosition - linearSlideRight.getCurrentPosition()) < 25) {
+                if (Math.abs(scoringPosition - linearSlideLeft.getCurrentPosition()) < 25) {
+                    linearSlideLeft.setPower(0);
+                    linearSlideRight.setPower(0);
+                    telemetry.addLine("WITHIN 25 ticks LINEAR SLIDES");
+                }
+            }
+
             int currentPositionLeft = linearSlideLeft.getCurrentPosition();
             int currentPositionRight = linearSlideRight.getCurrentPosition();
             telemetry.addData("Current Left Slide Position", currentPositionLeft);
             telemetry.addData("Current Right Slide Position", currentPositionRight);
             telemetry.addData("Slide Goal Position", scoringPosition);
             telemetry.addData("Linear Slide Power", power);
+            telemetry.addData("Linear Slide left Actual Power", linearSlideLeft.getPower());
+            telemetry.addData("Linear Slide right Actual Power", linearSlideRight.getPower());
+            telemetry.addData("Manual Mode status", manualMode);
         }
     }
 
-    public void slideToPositionManual(Gamepad gamepad) {
+    public void slideToPositionManual(Gamepad gamepad, Telemetry telemetry) {
         if (gamepad.right_trigger > 0) {
             positionManual += tickChange;
             positionManual = Math.min(positionManual, maxPosition);
@@ -136,14 +146,22 @@ public class NewLinearSlide {
             positionManual = Math.max(positionManual, 0);
         }
 
-        linearSlideLeft.setTargetPosition(positionManual);
-        linearSlideRight.setTargetPosition(positionManual);
+        linearSlideLeft.setTargetPosition(-positionManual);
+        linearSlideRight.setTargetPosition(-positionManual);
         linearSlideLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         linearSlideRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         linearSlideLeft.setPower(power);
         linearSlideRight.setPower(power);
-    }
 
+        int currentPositionLeft = linearSlideLeft.getCurrentPosition();
+        int currentPositionRight = linearSlideRight.getCurrentPosition();
+        telemetry.addData("Current Left Slide Position", currentPositionLeft);
+        telemetry.addData("Current Right Slide Position", currentPositionRight);
+        telemetry.addData("Slide Goal Position", scoringPosition);
+        telemetry.addData("Linear Slide Power", power);
+        telemetry.addData("Right trigger SLIDES", gamepad.right_trigger);
+        telemetry.addData("Left trigger SLIDES", gamepad.left_trigger);
+    }
 
     public void setSlidePower(double power) {
         this.power = power;
@@ -161,8 +179,8 @@ public class NewLinearSlide {
         scoringPosition = position;
     }
 
-    public void setHangingPosition(int position) {
-        hangingPosition = position;
+    public void setSpecimenPosition(int position) {
+        specimenPosition = position;
     }
 
     public void setBasketPosition(int position) {

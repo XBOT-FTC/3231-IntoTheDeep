@@ -17,7 +17,7 @@ public class Robot extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
 
         MecanumDrive mecanumDrive = new MecanumDrive(hardwareMap, telemetry);
-        mecanumDrive.setPrecisionPower(0.75);
+        mecanumDrive.setPrecisionPower(0.5);
         mecanumDrive.setStrafeConstant(1.1);
         mecanumDrive.setDefaultSpeed(1.0);
 
@@ -35,11 +35,11 @@ public class Robot extends LinearOpMode {
 //        swivel.setIntakeUpPosition(300);
 
         NewSwivel swivel = new NewSwivel(hardwareMap, DcMotorSimple.Direction.FORWARD);
-        swivel.setSwivelPower(1);
-        swivel.setTickChange(300);
+        swivel.setSwivelPower(0.5);
+        swivel.setTickChange(40);
         swivel.setMaxPosition(3000);
-        swivel.setHangingPosition(650);
-        swivel.setBasketPosition(1500);
+        swivel.setSpecimenPosition(1400);
+        swivel.setBasketPosition(1440);
         swivel.setIntakeUpPosition(200);
         swivel.setZeroPosition(0);
 
@@ -54,10 +54,10 @@ public class Robot extends LinearOpMode {
 
         NewLinearSlide linearSlide = new NewLinearSlide(hardwareMap, DcMotorSimple.Direction.FORWARD);
         linearSlide.setSlidePower(1);
-        linearSlide.setMaxPosition(3000);
-        linearSlide.setTickChange(200);
-        linearSlide.setBasketPosition(2750);
-        linearSlide.setHangingPosition(1000);
+        linearSlide.setMaxPosition(3680);
+        linearSlide.setTickChange(60);
+        linearSlide.setBasketPosition(3600);
+        linearSlide.setSpecimenPosition(1440);
         linearSlide.setZeroPosition(0);
 
         waitForStart();
