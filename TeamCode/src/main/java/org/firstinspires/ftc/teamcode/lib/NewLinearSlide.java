@@ -30,8 +30,6 @@ public class NewLinearSlide {
     public int zeroPosition = 0;
     public int maxPositionDown = 0;
 
-    private int maxExtensionSlides = 0;
-
     public boolean dpadUpPress = false;
     public boolean dpadLeftPress = false;
     public boolean dpadDownPress = false;
@@ -62,7 +60,7 @@ public class NewLinearSlide {
 
     public void slide(Gamepad gamepad, Telemetry telemetry, boolean swivelIsZero) {
         toggleManualMode(gamepad);
-        slideToPresetPosition(setScoringPosition(gamepad), telemetry, gamepad, swivelIsZero);
+        slideToPresetPosition(setScoringPosition(gamepad, swivelIsZero), telemetry, gamepad, swivelIsZero);
     }
 
     public boolean toggleManualMode(Gamepad gamepad) {
@@ -79,11 +77,11 @@ public class NewLinearSlide {
         return manualMode;
     }
 
-    public int setScoringPosition(Gamepad gamepad) {
+    public int setScoringPosition(Gamepad gamepad, boolean swivelIsZero) {
         if (gamepad.dpad_up) {
             if (!dpadUpPress) {
                 dpadUpPress = true;
-                positionPreset = basketPosition;
+                positionPreset = swivelIsZero ? maxPositionDown : basketPosition;
             }
         } else {
             if (dpadUpPress) {
@@ -119,14 +117,8 @@ public class NewLinearSlide {
         if (manualMode) {
             slideToPositionManual(gamepad, telemetry, swivelIsZero);
         } else {
-            if (swivelIsZero) {
-                linearSlideLeft.setTargetPosition(maxPositionDown);
-                linearSlideRight.setTargetPosition(maxPositionDown);
-            } else {
-                linearSlideLeft.setTargetPosition(-scoringPosition);
-                linearSlideRight.setTargetPosition(-scoringPosition);
-            }
-
+            linearSlideLeft.setTargetPosition(-scoringPosition);
+            linearSlideRight.setTargetPosition(-scoringPosition);
 
             linearSlideLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             linearSlideRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);

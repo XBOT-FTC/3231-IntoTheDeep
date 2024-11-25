@@ -40,7 +40,7 @@ public class Robot extends LinearOpMode {
         swivel.setMaxPosition(3000);
         swivel.setSpecimenPosition(1400);
         swivel.setBasketPosition(1440);
-        swivel.setIntakeUpPosition(200);
+        swivel.setIntakeSubPosition(200);
         swivel.setZeroPosition(0);
 
 //

@@ -17,7 +17,7 @@ public class NewSwivel {
     public int positionManual = 0;
     public int specimenPosition = 0;
     public int basketPosition = 0;
-    public int intakeUpPosition = 0;
+    public int intakeSubPosition = 0;
     public int zeroPosition = 0;
 
     public boolean dpadUpPress = false;
@@ -94,7 +94,7 @@ public class NewSwivel {
         if (gamepad.dpad_right) {
             if (!dpadRightPress) {
                 dpadRightPress = true;
-                positionPreset = intakeUpPosition;
+                positionPreset = intakeSubPosition;
             }
         } else {
             if (dpadRightPress) {
@@ -173,8 +173,8 @@ public class NewSwivel {
         basketPosition = position;
     }
 
-    public void setIntakeUpPosition(int position) {
-        intakeUpPosition = position;
+    public void setIntakeSubPosition(int position) {
+        intakeSubPosition = position;
     }
 
     public void setZeroPosition(int position) {
