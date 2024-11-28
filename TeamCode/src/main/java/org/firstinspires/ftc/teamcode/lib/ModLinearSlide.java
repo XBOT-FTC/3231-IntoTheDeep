@@ -33,7 +33,8 @@ public class ModLinearSlide {
     public int intakeSubPositionSwivel = 0;
     public int zeroPosition = 0;
 
-    public int threshold = 110;
+    public int thresholdUp = 110;
+    public int thresholdDown = 30;
     public int tickChange = 0;
 
     public ModLinearSlide(HardwareMap hardwareMap, DcMotorSimple.Direction direction) {
@@ -60,32 +61,48 @@ public class ModLinearSlide {
     public int setScoringPosition(Gamepad gamepad, boolean swivelIsZero, ModSwivel swivel, Telemetry telemetry) {
         // ---- BASKET ----
         if (gamepad.dpad_up) {
+            telemetry.addLine("D PAD UP ");
             swivel.swivelToPresetPosition(basketPositionSwivel, telemetry);
-            if (swivel.getSwivelPosition() >= basketPositionSwivel - threshold) {
+            if (swivel.getSwivelPosition() >= basketPositionSwivel - thresholdUp) {
                 positionPreset = basketPositionSlides;
             }
+        } else if (gamepad.dpad_left) {
+            telemetry.addLine("D PAD LEFT ");
+            swivel.swivelToPresetPosition(specimenPositionSwivel, telemetry);
+            if (swivel.getSwivelPosition() >= specimenPositionSwivel - thresholdUp) {
+                positionPreset = specimenPositionSlides;
+            }
         } else {
-            telemetry.addLine("ELSE STATEMENT LINEAR SLIDE");
+            telemetry.addLine("No button press ");
             positionPreset = zeroPosition;
-            if (linearSlideLeft.getCurrentPosition() <= threshold ||
-                    linearSlideRight.getCurrentPosition() <= threshold) {
+            if (linearSlideLeft.getCurrentPosition() <= thresholdDown ||
+                    linearSlideRight.getCurrentPosition() <= thresholdDown) {
                 swivel.swivelToPresetPosition(zeroPosition, telemetry);
             }
         }
 
+//        else {
+//            telemetry.addLine("ELSE STATEMENT LINEAR SLIDE");
+//            positionPreset = zeroPosition;
+//            if (linearSlideLeft.getCurrentPosition() <= threshold ||
+//                    linearSlideRight.getCurrentPosition() <= threshold) {
+//                swivel.swivelToPresetPosition(zeroPosition, telemetry);
+//            }
+//        }
+
         // ---- SPECIMEN ---
-        if (gamepad.dpad_left) {
-            swivel.swivelToPresetPosition(specimenPositionSwivel, telemetry);
-            if (swivel.getSwivelPosition() >= specimenPositionSwivel - threshold) {
-                positionPreset = specimenPositionSlides;
-            }
-        } else {
-            positionPreset = zeroPosition;
-            if (linearSlideLeft.getCurrentPosition() <= threshold &&
-                    linearSlideRight.getCurrentPosition() <= threshold) {
-                swivel.swivelToPresetPosition(zeroPosition, telemetry);
-            }
-        }
+//        if (gamepad.dpad_left) {
+//            swivel.swivelToPresetPosition(specimenPositionSwivel, telemetry);
+//            if (swivel.getSwivelPosition() >= specimenPositionSwivel - threshold) {
+//                positionPreset = specimenPositionSlides;
+//            }
+//        } else {
+//            positionPreset = zeroPosition;
+//            if (linearSlideLeft.getCurrentPosition() <= threshold &&
+//                    linearSlideRight.getCurrentPosition() <= threshold) {
+//                swivel.swivelToPresetPosition(zeroPosition, telemetry);
+//            }
+//        }
 
         // ---- EXTEND LINEAR SLIDE ONLY ----
 //        if (gamepad.right_trigger > 0) {
