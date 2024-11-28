@@ -52,12 +52,11 @@ public class Claw {
 
     }
 
-//
-//    public void open() {
-//        clawServo.setPosition(openPosition);
-//    }
-//
-//    public void close() {
-//        clawServo.setPosition(closePosition);
-//    }
+    public void open() {
+        clawServo.setPosition(openPosition);
+    }
+
+    public void close() {
+        clawServo.setPosition(closePosition);
+    }
 }

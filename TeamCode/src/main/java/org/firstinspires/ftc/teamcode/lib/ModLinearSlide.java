@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.lib;
 
 import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.hardwareMap;
+import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -55,7 +56,7 @@ public class ModLinearSlide {
     }
 
     public void slide(Gamepad gamepad, Telemetry telemetry, boolean swivelIsZero, ModSwivel swivel) {
-        slideToPresetPosition(setScoringPosition(gamepad, swivelIsZero, swivel, telemetry), telemetry, gamepad);
+        slideToPresetPosition(setScoringPosition(gamepad, swivelIsZero, swivel, telemetry), telemetry);
     }
 
     public int setScoringPosition(Gamepad gamepad, boolean swivelIsZero, ModSwivel swivel, Telemetry telemetry) {
@@ -81,59 +82,12 @@ public class ModLinearSlide {
             }
         }
 
-//        else {
-//            telemetry.addLine("ELSE STATEMENT LINEAR SLIDE");
-//            positionPreset = zeroPosition;
-//            if (linearSlideLeft.getCurrentPosition() <= threshold ||
-//                    linearSlideRight.getCurrentPosition() <= threshold) {
-//                swivel.swivelToPresetPosition(zeroPosition, telemetry);
-//            }
-//        }
-
-        // ---- SPECIMEN ---
-//        if (gamepad.dpad_left) {
-//            swivel.swivelToPresetPosition(specimenPositionSwivel, telemetry);
-//            if (swivel.getSwivelPosition() >= specimenPositionSwivel - threshold) {
-//                positionPreset = specimenPositionSlides;
-//            }
-//        } else {
-//            positionPreset = zeroPosition;
-//            if (linearSlideLeft.getCurrentPosition() <= threshold &&
-//                    linearSlideRight.getCurrentPosition() <= threshold) {
-//                swivel.swivelToPresetPosition(zeroPosition, telemetry);
-//            }
-//        }
-
-        // ---- EXTEND LINEAR SLIDE ONLY ----
-//        if (gamepad.right_trigger > 0) {
-//            positionPreset += tickChange;
-//            positionPreset = swivelIsZero ? Math.min(maxPositionDownSlides, positionPreset) : positionPreset;
-//        } else if (gamepad.left_trigger > 0) {
-//            positionPreset -= tickChange;
-//            // TODO: ADD SAFETY CEHCK BECAUSE THIS IS MANUAL
-//            if (linearSlideLeft.getCurrentPosition() <= threshold && linear)
-//        }
-
-        // ---- INTAKE SUBMERSIBLE ----
-//        if (gamepad.dpad_down) {
-//            swivel.swivelToPresetPosition(intakeSubPositionSwivel, telemetry);
-//            if (swivel.getSwivelPosition() >= intakeSubPositionSwivel - threshold) {
-//                positionPreset = basketPositionSlides;
-//            }
-//        } else {
-//            positionPreset = zeroPosition;
-//            if (linearSlideLeft.getCurrentPosition() <= threshold &&
-//                    linearSlideRight.getCurrentPosition() <= threshold) {
-//                swivel.swivelToPresetPosition(zeroPosition, telemetry);
-//            }
-//        }
-//
 
 
         return positionPreset;
     }
 
-    public void slideToPresetPosition(int scoringPosition, Telemetry telemetry, Gamepad gamepad) {
+    public void slideToPresetPosition(int scoringPosition, Telemetry telemetry) {
         linearSlideLeft.setTargetPosition(-scoringPosition);
         linearSlideRight.setTargetPosition(-scoringPosition);
         linearSlideLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -198,6 +152,28 @@ public class ModLinearSlide {
 
     public void setTickChange(int change) {
         tickChange = change;
+    }
+
+    public void scoreBasketPosition(ModSwivel swivel, Telemetry telemetry) {
+        swivel.swivelToPresetPosition(basketPositionSwivel, telemetry);
+        if (swivel.getSwivelPosition() >= basketPositionSwivel - thresholdUp) {
+            slideToPresetPosition(basketPositionSlides, telemetry);
+        }
+    }
+
+    public void scoreSpecimenPosition(ModSwivel swivel, Telemetry telemetry) {
+        swivel.swivelToPresetPosition(specimenPositionSwivel, telemetry);
+        if (swivel.getSwivelPosition() >= specimenPositionSwivel - thresholdUp) {
+            slideToPresetPosition(specimenPositionSlides, telemetry);
+        }
+    }
+
+    public void setSwivelAndLinearSlidesDown(ModSwivel swivel, Telemetry telemetry) {
+        slideToPresetPosition(zeroPosition, telemetry);
+        if (linearSlideLeft.getCurrentPosition() <= thresholdDown ||
+                linearSlideRight.getCurrentPosition() <= thresholdDown) {
+            swivel.swivelToPresetPosition(zeroPosition, telemetry);
+        }
     }
 
 }
