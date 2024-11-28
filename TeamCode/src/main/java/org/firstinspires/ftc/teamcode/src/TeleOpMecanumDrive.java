@@ -29,8 +29,6 @@
 
 package org.firstinspires.ftc.teamcode.src;
 
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -54,7 +52,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 //@Disabled
 
-public class MecanumDrive {
+public class TeleOpMecanumDrive {
 
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
@@ -71,7 +69,7 @@ public class MecanumDrive {
 
     private double strafeConstant = 1;
 
-    public MecanumDrive(HardwareMap hardwareMap, Telemetry telemetry) {
+    public TeleOpMecanumDrive(HardwareMap hardwareMap, Telemetry telemetry) {
         this.frontLeftDrive  = hardwareMap.get(DcMotor.class, "fl_drive");
         this.frontRightDrive = hardwareMap.get(DcMotor.class, "fr_drive");
         this.backLeftDrive = hardwareMap.get(DcMotor.class, "bl_drive");
