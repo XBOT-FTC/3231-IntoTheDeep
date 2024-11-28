@@ -29,8 +29,6 @@
 
 package org.firstinspires.ftc.teamcode.src;
 
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -54,7 +52,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 //@Disabled
 
-public class MecanumDrive {
+public class TeleOpMecanumDrive {
 
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
@@ -71,7 +69,7 @@ public class MecanumDrive {
 
     private double strafeConstant = 1;
 
-    public MecanumDrive(HardwareMap hardwareMap, Telemetry telemetry) {
+    public TeleOpMecanumDrive(HardwareMap hardwareMap, Telemetry telemetry) {
         this.frontLeftDrive  = hardwareMap.get(DcMotor.class, "fl_drive");
         this.frontRightDrive = hardwareMap.get(DcMotor.class, "fr_drive");
         this.backLeftDrive = hardwareMap.get(DcMotor.class, "bl_drive");
@@ -127,6 +125,8 @@ public class MecanumDrive {
 //        telemetry.addData("Encoder", "frontLeft (%.2f), backLeft (%.2f), frontRight (%.2f), backRight (%.2f)", FLposition, FRposition, BLposition, BRposition);
         telemetry.addData("Status", "Run Time: " + runtime.toString());
         telemetry.addData("Motors", "frontLeft (%.2f), backLeft (%.2f), frontRight (%.2f), backRight (%.2f)", frontLeftDrive.getPower(), backLeftDrive.getPower(), frontRightDrive.getPower(), backRightDrive.getPower());
+        telemetry.addData("Motor Ticks", "frontLeft (%d), backLeft (%d), frontRight (%d), backRight (%d)", 
+        frontLeftDrive.getCurrentPosition(), backLeftDrive.getCurrentPosition(), frontRightDrive.getCurrentPosition(), backRightDrive.getCurrentPosition());
         telemetry.addData("Gamepad","y: (%.2f), x: (%.2f), rx: (%.2f)", y, x, rx);
 
     }

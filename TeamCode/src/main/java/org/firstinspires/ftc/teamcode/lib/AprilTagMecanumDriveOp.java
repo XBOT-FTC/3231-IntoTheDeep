@@ -24,7 +24,7 @@ import java.util.List;
    LEFT BUMPER: ALIGN TO APRILTAG
 */
 
-public class MecanumDrive {
+public class AprilTagMecanumDriveOp {
     // drive stuff
     private DcMotor leftFrontDrive = null;
     private DcMotor leftBackDrive = null;
@@ -60,7 +60,7 @@ public class MecanumDrive {
     public double rotate = 0; // Desired turning power/speed (-1 to +1)
     public boolean loop = true;
 
-    public MecanumDrive(HardwareMap hardwareMap, DcMotorSimple.Direction direction, Telemetry telemetry) {
+    public AprilTagMecanumDriveOp(HardwareMap hardwareMap, DcMotorSimple.Direction direction, Telemetry telemetry) {
         leftFrontDrive  = hardwareMap.get(DcMotor.class, "lf_drive");
         leftBackDrive = hardwareMap.get(DcMotor.class, "lb_drive");
         rightFrontDrive  = hardwareMap.get(DcMotor.class, "rf_drive");
