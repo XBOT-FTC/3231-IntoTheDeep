@@ -95,7 +95,7 @@ public class MecanumDrive {
         double x = gamepad.left_stick_x * strafeConstant; // Counteract imperfect strafing
         double rx = gamepad.right_stick_x;
 
-        if (gamepad.x && pressed == false) {
+        if (gamepad.b && pressed == false) {
             precisionToggle = !precisionToggle;
             pressed = true;
         }

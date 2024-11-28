@@ -7,6 +7,8 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 //import org.firstinspires.ftc.teamcode.lib.LinearSlide;
 //import org.firstinspires.ftc.teamcode.lib.Swivel;
 import org.firstinspires.ftc.teamcode.lib.NewLinearSlide;
+import org.firstinspires.ftc.teamcode.lib.ModLinearSlide;
+import org.firstinspires.ftc.teamcode.lib.ModSwivel;
 import org.firstinspires.ftc.teamcode.lib.NewSwivel;
 
 
@@ -22,53 +24,54 @@ public class Robot extends LinearOpMode {
         mecanumDrive.setDefaultSpeed(1.0);
 
         Claw claw = new Claw(hardwareMap, telemetry);
-//
-//        Swivel swivel = new Swivel(hardwareMap, DcMotorSimple.Direction.FORWARD);
-//        swivel.setSwivelPower(1);
+
+//        NewSwivel swivel = new NewSwivel(hardwareMap, DcMotorSimple.Direction.FORWARD);
+//        swivel.setSwivelPower(0.5);
+//        swivel.setTickChange(125);
 //        swivel.setMaxPosition(3000);
-//        swivel.setTickChange(300);
-//        swivel.setSpeedModeLimiter(0.5);
-//        swivel.setDefaultPowerPercentage(1);
-//
-//        swivel.setHangingPosition(1000);
-//        swivel.setBasketPosition(1750);
-//        swivel.setIntakeUpPosition(300);
+//        swivel.setSpecimenPosition(1400);
+//        swivel.setBasketPosition(1440);
+//        swivel.setIntakeSubPosition(200);
+//        swivel.setZeroPosition(0);
 
-        NewSwivel swivel = new NewSwivel(hardwareMap, DcMotorSimple.Direction.FORWARD);
+        ModSwivel swivel = new ModSwivel(hardwareMap, DcMotorSimple.Direction.FORWARD);
         swivel.setSwivelPower(0.5);
-        swivel.setTickChange(125);
         swivel.setMaxPosition(3000);
-        swivel.setSpecimenPosition(1400);
-        swivel.setBasketPosition(1440);
-        swivel.setIntakeSubPosition(200);
-        swivel.setZeroPosition(0);
 
-//
-//        LinearSlide linearSlide = new LinearSlide(hardwareMap, DcMotorSimple.Direction.FORWARD);
+
+//        NewLinearSlide linearSlide = new NewLinearSlide(hardwareMap, DcMotorSimple.Direction.FORWARD);
 //        linearSlide.setSlidePower(1);
-//        linearSlide.setMaxPosition(3200);
-//        linearSlide.setTickChange(200);
-//        linearSlide.setSpeedModeLimiter(1);
-//        linearSlide.setScoringPosition(3000);
-//        linearSlide.setDefaultPowerPercentage(1.0);
+//        linearSlide.setMaxPosition(3680);
+//        linearSlide.setTickChange(60);
+//        linearSlide.setBasketPosition(3600);
+//        linearSlide.setSpecimenPosition(1440);
+//        linearSlide.setZeroPosition(0);
+//        linearSlide.setMaxPositionForDown(2775);
 
-        NewLinearSlide linearSlide = new NewLinearSlide(hardwareMap, DcMotorSimple.Direction.FORWARD);
+        ModLinearSlide linearSlide = new ModLinearSlide(hardwareMap, DcMotorSimple.Direction.FORWARD);
         linearSlide.setSlidePower(1);
         linearSlide.setMaxPosition(3680);
-        linearSlide.setTickChange(60);
-        linearSlide.setBasketPosition(3600);
-        linearSlide.setSpecimenPosition(1440);
-        linearSlide.setZeroPosition(0);
+
+        linearSlide.setBasketPositionSlides(3600);
+        linearSlide.setSpecimenPositionSlides(1440);
+
+        linearSlide.setIntakeSubPositionSwivel(200);
+        linearSlide.setSpecimenPositionSwivel(1400);
+        linearSlide.setBasketPositionSwivel(1440);
+
         linearSlide.setMaxPositionForDown(2775);
+        linearSlide.setZeroPosition(0);
+
+        linearSlide.setTickChange(60);
+
 
         waitForStart();
 
         while(opModeIsActive()) {
-            claw.powerServo(gamepad2, telemetry);
+            claw.powerServo(gamepad1, telemetry);
             mecanumDrive.drive(gamepad1);
-            linearSlide.slide(gamepad1, telemetry, swivel
-                    .getSwivelIsZero());
-            swivel.swivel(gamepad2, telemetry);
+            linearSlide.slide(gamepad2, telemetry, swivel
+                    .getSwivelIsZero(), swivel);
             telemetry.update();
         }
     }}
