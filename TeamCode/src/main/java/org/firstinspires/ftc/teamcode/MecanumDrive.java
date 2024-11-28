@@ -229,10 +229,10 @@ public final class MecanumDrive {
 
         // TODO: reverse motor directions if needed
         //   leftFront.setDirection(DcMotorSimple.Direction.REVERSE);
-        leftFront.setDirection(DcMotor.DcMotorSimple.Direction.REVERSE)
-        leftBack.setDirection(DcMotor.DcMotorSimple.Direction.REVERSE)
-        rightBack.setDirection(DcMotor.DcMotorSimple.Direction.FORWARD)
-        rightFront.setDirection(DcMotor.DcMotorSimple.Direction.FORWARD)
+        leftFront.setDirection(DcMotorSimple.Direction.REVERSE);
+        leftBack.setDirection(DcMotorSimple.Direction.REVERSE);
+        rightBack.setDirection(DcMotorSimple.Direction.FORWARD);
+        rightFront.setDirection(DcMotorSimple.Direction.FORWARD);
 
 
 
