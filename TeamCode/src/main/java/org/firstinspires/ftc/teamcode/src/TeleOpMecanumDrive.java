@@ -126,7 +126,7 @@ public class TeleOpMecanumDrive {
         telemetry.addData("Status", "Run Time: " + runtime.toString());
         telemetry.addData("Motors", "frontLeft (%.2f), backLeft (%.2f), frontRight (%.2f), backRight (%.2f)", frontLeftDrive.getPower(), backLeftDrive.getPower(), frontRightDrive.getPower(), backRightDrive.getPower());
         telemetry.addData("Motor Ticks", "frontLeft (%d), backLeft (%d), frontRight (%d), backRight (%d)", 
-        frontLeft.getCurrentPosition(), backLeft.getCurrentPosition(), frontRight.getCurrentPosition(), backRight.getCurrentPosition());
+        frontLeftDrive.getCurrentPosition(), backLeftDrive.getCurrentPosition(), frontRightDrive.getCurrentPosition(), backRightDrive.getCurrentPosition());
         telemetry.addData("Gamepad","y: (%.2f), x: (%.2f), rx: (%.2f)", y, x, rx);
 
     }
