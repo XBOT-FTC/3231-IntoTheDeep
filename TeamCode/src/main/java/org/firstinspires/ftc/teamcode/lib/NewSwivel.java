@@ -17,7 +17,7 @@ public class NewSwivel {
     public int positionManual = 0;
     public int specimenPosition = 0;
     public int basketPosition = 0;
-    public int intakeUpPosition = 0;
+    public int intakeSubPosition = 0;
     public int zeroPosition = 0;
 
     public boolean dpadUpPress = false;
@@ -35,6 +35,7 @@ public class NewSwivel {
         swivel.setTargetPosition(0);
         swivel.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         swivel.setDirection(direction);
+
     }
 
     public void swivel(Gamepad gamepad, Telemetry telemetry) {
@@ -93,7 +94,7 @@ public class NewSwivel {
         if (gamepad.dpad_right) {
             if (!dpadRightPress) {
                 dpadRightPress = true;
-                positionPreset = intakeUpPosition;
+                positionPreset = intakeSubPosition;
             }
         } else {
             if (dpadRightPress) {
@@ -134,6 +135,11 @@ public class NewSwivel {
             positionManual = Math.max(positionManual, 0);
         }
 
+        if (Math.abs(swivel.getCurrentPosition()) < 25) {
+            swivel.setPower(0);
+            telemetry.addLine("WITHIN 25 ticks SWIVEL MANUAL");
+        }
+
         swivel.setTargetPosition(positionManual);
         swivel.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         swivel.setPower(power);
@@ -167,11 +173,15 @@ public class NewSwivel {
         basketPosition = position;
     }
 
-    public void setIntakeUpPosition(int position) {
-        intakeUpPosition = position;
+    public void setIntakeSubPosition(int position) {
+        intakeSubPosition = position;
     }
 
     public void setZeroPosition(int position) {
         zeroPosition = position;
+    }
+
+    public boolean getSwivelIsZero() {
+        return swivel.getCurrentPosition() < 25;
     }
 }

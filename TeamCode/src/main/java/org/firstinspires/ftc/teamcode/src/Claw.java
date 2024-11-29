@@ -10,12 +10,13 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 public class Claw {
     Servo clawServo = null;
     boolean buttonPress;
-    double openPosition = 0.5;
-    double closePosition = 0;
+    double closePosition = 1;
+    double openPosition = 0;
     boolean grabMode = false;
 
     public Claw(HardwareMap hardwareMap, Telemetry telemetry) {
         clawServo = hardwareMap.get(Servo.class, "clawServo");
+        clawServo.setDirection(Servo.Direction.REVERSE);
         this.buttonPress = false;
     }
 
@@ -40,23 +41,22 @@ public class Claw {
 
     public void setServo(Telemetry telemetry) {
         if (grabMode) {
-            clawServo.setPosition(openPosition);
-            telemetry.addLine("OPEN");
-        } else {
             clawServo.setPosition(closePosition);
             telemetry.addLine("CLOSE");
+        } else {
+            clawServo.setPosition(openPosition);
+            telemetry.addLine("OPEN");
         }
 
         telemetry.addData("Current pos Claw", clawServo.getPosition());
 
     }
 
-//
-//    public void open() {
-//        clawServo.setPosition(openPosition);
-//    }
-//
-//    public void close() {
-//        clawServo.setPosition(closePosition);
-//    }
+    public void open() {
+        clawServo.setPosition(openPosition);
+    }
+
+    public void close() {
+        clawServo.setPosition(closePosition);
+    }
 }
