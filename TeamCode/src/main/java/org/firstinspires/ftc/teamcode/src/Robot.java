@@ -18,10 +18,10 @@ public class Robot extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
 
-        MecanumDrive mecanumDrive = new MecanumDrive(hardwareMap, telemetry);
-        mecanumDrive.setPrecisionPower(0.3);
-        mecanumDrive.setStrafeConstant(1.1);
-        mecanumDrive.setDefaultSpeed(1.0);
+        TeleOpMecanumDrive teleOpMecanumDrive = new TeleOpMecanumDrive(hardwareMap, telemetry);
+        teleOpMecanumDrive.setPrecisionPower(0.5);
+        teleOpMecanumDrive.setStrafeConstant(1.1);
+        teleOpMecanumDrive.setDefaultSpeed(1.0);
 
         Claw claw = new Claw(hardwareMap, telemetry);
 
@@ -69,9 +69,9 @@ public class Robot extends LinearOpMode {
 
         while(opModeIsActive()) {
             claw.powerServo(gamepad1, telemetry);
-            mecanumDrive.drive(gamepad1);
             linearSlide.slide(gamepad2, telemetry, swivel
                     .getSwivelIsZero(), swivel);
+            teleOpMecanumDrive.drive(gamepad1);
             telemetry.update();
         }
     }}
