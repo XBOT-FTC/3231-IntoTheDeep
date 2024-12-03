@@ -10,8 +10,6 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.lib.NewSwivel;
-
-
 /* CONTROLS
    A: PRECISION MODE
    Y: SCORING POSITION
@@ -21,13 +19,14 @@ public class ModLinearSlide {
     private DcMotor linearSlideLeft = null;
     private DcMotor linearSlideRight = null;
     public int maxPosition = 0;
+    public int maxPositionSwivel = 0;
     public double power = 0;
     public int positionPreset = 0;
+    public int manualPosition = 0;
 
     public int specimenPositionSlides = 0;
     public int basketPositionSlides = 0;
     public int maxPositionDownSlides = 0;
-
 
     public int specimenPositionSwivel = 0;
     public int basketPositionSwivel = 0;
@@ -37,6 +36,10 @@ public class ModLinearSlide {
     public int thresholdUp = 110;
     public int thresholdDown = 30;
     public int tickChange = 0;
+    public int tickChangeSwivel = 0;
+
+    public boolean aPress = false;
+    public boolean manualMode = false;
 
     public ModLinearSlide(HardwareMap hardwareMap, DcMotorSimple.Direction direction) {
         linearSlideLeft = hardwareMap.get(DcMotor.class, "l_slide");
@@ -56,7 +59,36 @@ public class ModLinearSlide {
     }
 
     public void slide(Gamepad gamepad, Telemetry telemetry, boolean swivelIsZero, ModSwivel swivel) {
+        toggleManualMode(gamepad, swivel);
         slideToPresetPosition(setScoringPosition(gamepad, swivelIsZero, swivel, telemetry), telemetry);
+    }
+
+    public void toggleManualMode(Gamepad gamepad, ModSwivel swivel) {
+        if (gamepad.a) {
+            if (!aPress) {
+                aPress = true;
+            }
+        } else {
+            if (aPress) {
+                aPress = false;
+                manualMode = !manualMode;
+            }
+        }
+
+        this.manualMode(gamepad, swivel);
+    }
+
+    public void manualMode(Gamepad gamepad, ModSwivel swivel) {
+        if (manualMode) {
+            if (gamepad.right_trigger > 0) {
+                manualPosition += tickChangeSwivel;
+                manualPosition = Math.min(manualPosition, maxPositionSwivel);
+            } else {
+                manualPosition = 0;
+            }
+        }
+
+        swivel.swivelToPresetPosition(manualPosition, telemetry);
     }
 
     public int setScoringPosition(Gamepad gamepad, boolean swivelIsZero, ModSwivel swivel, Telemetry telemetry) {
@@ -73,6 +105,9 @@ public class ModLinearSlide {
             if (swivel.getSwivelPosition() >= specimenPositionSwivel - thresholdUp) {
                 positionPreset = specimenPositionSlides;
             }
+        } else if (gamepad.left_trigger > 0) {
+            positionPreset += tickChange;
+            positionPreset = Math.min(positionPreset, maxPosition);
         } else {
             telemetry.addLine("No button press ");
             positionPreset = zeroPosition;
@@ -81,8 +116,6 @@ public class ModLinearSlide {
                 swivel.swivelToPresetPosition(zeroPosition, telemetry);
             }
         }
-
-
 
         return positionPreset;
     }
@@ -126,6 +159,10 @@ public class ModLinearSlide {
         this.maxPositionDownSlides = maxTicks;
     }
 
+    public void setMaxPositionSwivel(int maxTicks) {
+        maxPositionSwivel = maxTicks;
+    }
+
     public void setSpecimenPositionSlides(int position) {
         specimenPositionSlides = position;
     }
@@ -152,6 +189,10 @@ public class ModLinearSlide {
 
     public void setTickChange(int change) {
         tickChange = change;
+    }
+
+    public void setTickChangeSwivel(int change) {
+        tickChangeSwivel = change;
     }
 
     public void scoreBasketPosition(ModSwivel swivel, Telemetry telemetry) {
