@@ -17,7 +17,7 @@ public class NewSwivel {
     public int positionManual = 0;
     public int specimenPosition = 0;
     public int basketPosition = 0;
-    public int intakeUpPosition = 0;
+    public int intakeSubPosition = 0;
     public int zeroPosition = 0;
 
     public boolean dpadUpPress = false;
@@ -94,7 +94,7 @@ public class NewSwivel {
         if (gamepad.dpad_right) {
             if (!dpadRightPress) {
                 dpadRightPress = true;
-                positionPreset = intakeUpPosition;
+                positionPreset = intakeSubPosition;
             }
         } else {
             if (dpadRightPress) {
@@ -119,7 +119,6 @@ public class NewSwivel {
             telemetry.addLine("WITHIN 25 ticks SWIVEL");
         }
 
-        swivel.getCurrentPosition();
         int currentPosition = swivel.getCurrentPosition();
         telemetry.addData("Current Swivel Position", currentPosition);
         telemetry.addData("Swivel Goal Position", scoringPosition);
@@ -134,6 +133,11 @@ public class NewSwivel {
         } else if (gamepad.left_trigger > 0) {
             positionManual -= tickChange;
             positionManual = Math.max(positionManual, 0);
+        }
+
+        if (Math.abs(swivel.getCurrentPosition()) < 25) {
+            swivel.setPower(0);
+            telemetry.addLine("WITHIN 25 ticks SWIVEL MANUAL");
         }
 
         swivel.setTargetPosition(positionManual);
@@ -169,8 +173,8 @@ public class NewSwivel {
         basketPosition = position;
     }
 
-    public void setIntakeUpPosition(int position) {
-        intakeUpPosition = position;
+    public void setIntakeSubPosition(int position) {
+        intakeSubPosition = position;
     }
 
     public void setZeroPosition(int position) {
