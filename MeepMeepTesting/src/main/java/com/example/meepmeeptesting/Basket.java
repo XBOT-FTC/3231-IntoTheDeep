@@ -14,18 +14,19 @@ public class Basket {
         RoadRunnerBotEntity myBot = new DefaultBotBuilder(meepMeep)
                 // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
                 .setConstraints(60, 60, Math.toRadians(180), Math.toRadians(90), 15)
-                .followTrajectorySequence(drive -> drive.trajectorySequenceBuilder(new Pose2d(24, 63, Math.toRadians(-90))) // right here is where u plug the starting coordinates points
+                .followTrajectorySequence(drive -> drive.trajectorySequenceBuilder(new Pose2d(24, 63, Math.toRadians(270))) // right here is where u plug the starting coordinates points
                         .splineTo(new Vector2d(48,48), Math.toRadians(45))
                         .waitSeconds(1)
-                        .splineTo(new Vector2d(49, 40), Math.toRadians(-90))
+                        .splineTo(new Vector2d(49, 40), Math.toRadians(270))
                         .waitSeconds(1)
                         .splineTo(new Vector2d(48,48), Math.toRadians(45))
                         .waitSeconds(1)
-                        .splineTo(new Vector2d(58, 40), Math.toRadians(-90))
+                        .splineTo(new Vector2d(58, 40), Math.toRadians(270))
                         .waitSeconds(1)
                         .splineTo(new Vector2d(48,48), Math.toRadians(45))
-                        .waitSeconds(2)
-                        .turn(Math.toRadians(-135))
+                        .waitSeconds(1)
+                        .turn(Math.toRadians(225))
+                        .waitSeconds(3)
                         .splineTo(new Vector2d(26,12), Math.toRadians(180))
                         .build());
 
