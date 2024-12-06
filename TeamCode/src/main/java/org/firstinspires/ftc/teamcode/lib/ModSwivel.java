@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.lib;
 
+import androidx.annotation.NonNull;
+
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Gamepad;
@@ -31,7 +33,7 @@ public class ModSwivel {
 //            swivel.setPower(0);
 //            telemetry.addLine("WITHIN 70 ticks OF 0, SWIVEL");
 //        }
-
+        telemetry.addLine("RAHHHHHHHHHHH");
         int currentPosition = swivel.getCurrentPosition();
         telemetry.addData("Current Swivel Position", currentPosition);
         telemetry.addData("Swivel Goal Position", scoringPosition);
@@ -48,10 +50,22 @@ public class ModSwivel {
     }
 
     public boolean getSwivelIsZero() {
-        return swivel.getCurrentPosition() < 25;
+        return swivel.getCurrentPosition() < 50;
     }
 
     public int getSwivelPosition() {
         return swivel.getCurrentPosition();
     }
+
+//    public void actualSetTargetPosition(int scoringPosition, Telemetry telemetry) {
+//        swivel.setTargetPosition(scoringPosition);
+//        swivel.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//        swivel.setPower(power);
+//
+//        int currentPosition = swivel.getCurrentPosition();
+//        telemetry.addData("Current Swivel Position", currentPosition);
+//        telemetry.addData("Swivel Goal Position", scoringPosition);
+//        telemetry.addData("Swivel Power", power);
+//        telemetry.addData("Actual Power", swivel.getPower());
+//    }
 }

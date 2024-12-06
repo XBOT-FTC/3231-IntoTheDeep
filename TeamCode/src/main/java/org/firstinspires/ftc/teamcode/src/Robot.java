@@ -19,7 +19,7 @@ public class Robot extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
 
         TeleOpMecanumDrive teleOpMecanumDrive = new TeleOpMecanumDrive(hardwareMap, telemetry);
-        teleOpMecanumDrive.setPrecisionPower(0.5);
+        teleOpMecanumDrive.setPrecisionPower(0.25);
         teleOpMecanumDrive.setStrafeConstant(1.1);
         teleOpMecanumDrive.setDefaultSpeed(1.0);
 
