@@ -52,10 +52,9 @@ public class CompetitionRoadRunner extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
 
         slidePosition = 0;
-
         swivelPosition = 0;
 
-         claw = new Claw(hardwareMap, telemetry);
+        claw = new Claw(hardwareMap, telemetry);
 
         swivel = new ModSwivel(hardwareMap, DcMotorSimple.Direction.FORWARD);
         swivel.setSwivelPower(0.5);
@@ -243,7 +242,9 @@ public Action slideMovement(Telemetry telemetry) {
             }
 
             linearSlide.slideToPresetPositionAuto(slidePosition, telemetry);
-            telemetry.addData("Roadrunner, Target Position", slidePosition);
+            telemetry.addData("Roadrunner, LinearSlide Current Position", linearSlide.linearSlideLeft.getCurrentPosition());
+            telemetry.addData("Roadrunner, LinearSlide Target Position", slidePosition);
+            telemetry.addData("Roadrunner, LinearSlide Power Position", linearSlide.linearSlideLeft.getPower());
 //            if (Math.abs(linearSlide.linearSlideLeft.getCurrentPosition() - slidePosition) < 30
 //                    || Math.abs(linearSlide.linearSlideRight.getCurrentPosition() - slidePosition) < 30) {
 //                return false;
