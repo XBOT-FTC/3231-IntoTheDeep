@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.src;
 
+import androidx.annotation.NonNull;
+
 import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -17,6 +19,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.MecanumDrive;
 import org.firstinspires.ftc.teamcode.lib.ModLinearSlide;
 import org.firstinspires.ftc.teamcode.lib.ModSwivel;
@@ -34,16 +37,31 @@ public class CompetitionRoadRunner extends LinearOpMode {
      * @throws InterruptedException When the OpMode is stopped while calling a method
      *                              that can throw {@link InterruptedException}
      */
+
+    public Claw claw;
+
+    public ModSwivel swivel;
+
+    public ModLinearSlide linearSlide;
+
+    int slidePosition;
+
+    int swivelPosition;
+
     @Override
     public void runOpMode() throws InterruptedException {
 
-        Claw claw = new Claw(hardwareMap, telemetry);
+        slidePosition = 0;
 
-        ModSwivel swivel = new ModSwivel(hardwareMap, DcMotorSimple.Direction.FORWARD);
+        swivelPosition = 0;
+
+         claw = new Claw(hardwareMap, telemetry);
+
+        swivel = new ModSwivel(hardwareMap, DcMotorSimple.Direction.FORWARD);
         swivel.setSwivelPower(0.5);
         swivel.setMaxPosition(3000);
 
-        ModLinearSlide linearSlide = new ModLinearSlide(hardwareMap, DcMotorSimple.Direction.FORWARD);
+        linearSlide = new ModLinearSlide(hardwareMap, DcMotorSimple.Direction.FORWARD);
         linearSlide.setSlidePower(1);
         linearSlide.setMaxPosition(3680);
         linearSlide.setMaxPositionForDown(2775);
@@ -62,40 +80,58 @@ public class CompetitionRoadRunner extends LinearOpMode {
         Action tab = drive.actionBuilder(initialPose)
                 .setTangent(Math.toRadians(270))
 
-                .splineToLinearHeading(new Pose2d(56, 56, Math.toRadians(45)), Math.toRadians(91))
+                .splineToLinearHeading(new Pose2d(54, 54, Math.toRadians(45)), Math.toRadians(91))
 
-                .afterTime(0.5, new InstantAction(() -> {
-                    linearSlide.scoreBasketPosition(swivel, telemetry);
+                .afterTime(.5, new InstantAction(() -> {
+                    swivelPosition = 1440;
+                }))
+                .afterTime(5.5, new InstantAction(() -> {
+                    slidePosition = 1440;
                 }))
 
-                .afterTime(4, new InstantAction(() -> {
+                .afterTime(9, new InstantAction(() -> {
                     claw.open();
                 }))
 
-                .afterTime(1, new InstantAction(() -> {
+                .afterTime(6.5, new InstantAction(() -> {
                     claw.close();
                 }))
 
-                .afterTime(.5, new InstantAction(() -> {
-                    linearSlide.setSwivelAndLinearSlidesDown(swivel, telemetry);
-                })) //preloaded piece
+                .afterTime(7, new InstantAction(() -> {
+                    slidePosition = 0;
+                }))
 
-                .splineToLinearHeading(new Pose2d(49, 40, Math.toRadians(270)), Math.toRadians(89))
+                .afterTime(5, new InstantAction(() -> {
+                    swivelPosition = 0;
+                })) // score preloaded piece
+
+                .waitSeconds(23)
+
+                .splineToLinearHeading(new Pose2d(49, 45, Math.toRadians(270)), Math.toRadians(89))
+
+                .lineToY(38)
 
                 .afterTime(0, new InstantAction(() -> {
                     claw.open();
                 }))
 
                 .afterTime(1, new InstantAction(() -> {
-                    claw.close(); //grab 1st piece
+                    claw.close(); // grab 1st piece
                 }))
 
+                .waitSeconds(1.5)
 
-                .splineToLinearHeading(new Pose2d(56, 56, Math.toRadians(45)), Math.toRadians(89))
+                .lineToY(45)
+
+                .splineToLinearHeading(new Pose2d(54, 54, Math.toRadians(45)), Math.toRadians(89))
                 .waitSeconds(.5)
 
-                .afterTime(0.5, new InstantAction(() -> {
-                    linearSlide.scoreBasketPosition(swivel, telemetry);
+                .afterTime(5, new InstantAction(() -> {
+                    slidePosition = 1440;
+                }))
+
+                .afterTime(5, new InstantAction(() -> {
+                    slidePosition = 1440;
                 }))
 
                 .afterTime(4, new InstantAction(() -> {
@@ -106,12 +142,18 @@ public class CompetitionRoadRunner extends LinearOpMode {
                     claw.close();
                 }))
 
-                .afterTime(.5, new InstantAction(() -> {
-                    linearSlide.setSwivelAndLinearSlidesDown(swivel, telemetry);
-                })) //score 1st piece
+                .afterTime(5, new InstantAction(() -> {
+                    slidePosition = 0;
+                }))
 
-                .splineToLinearHeading(new Pose2d(58, 40, Math.toRadians(270)), Math.toRadians(89))
-                .waitSeconds(.5)
+                .afterTime(5, new InstantAction(() -> {
+                    slidePosition = 0;
+                })) // score 1st piece
+
+                .waitSeconds(6.5)
+
+                .splineToLinearHeading(new Pose2d(59, 45, Math.toRadians(270)), Math.toRadians(89))
+                .lineToY(38)
 
                 .afterTime(0, new InstantAction(() -> {
                     claw.open();
@@ -119,13 +161,19 @@ public class CompetitionRoadRunner extends LinearOpMode {
 
                 .afterTime(1, new InstantAction(() -> {
                     claw.close();
-                })) //grab 2nd piece
+                })) // grab 2nd piece
 
-                .splineToLinearHeading(new Pose2d(56, 56, Math.toRadians(45)), Math.toRadians(89))
+                .waitSeconds(1.5)
+
+                .splineToLinearHeading(new Pose2d(54, 54, Math.toRadians(45)), Math.toRadians(89))
                 .waitSeconds(.5)
 
-                .afterTime(0.5, new InstantAction(() -> {
-                    linearSlide.scoreBasketPosition(swivel, telemetry);
+                .afterTime(5, new InstantAction(() -> {
+                    slidePosition = 1440;
+                }))
+
+                .afterTime(5, new InstantAction(() -> {
+                    slidePosition = 1440;
                 }))
 
                 .afterTime(4, new InstantAction(() -> {
@@ -136,14 +184,23 @@ public class CompetitionRoadRunner extends LinearOpMode {
                     claw.close();
                 }))
 
-                .afterTime(.5, new InstantAction(() -> {
-                    linearSlide.setSwivelAndLinearSlidesDown(swivel, telemetry);
-                })) //score 2nd piece
+                .lineToY(52)
+                .lineToX(52)
+
+                .afterTime(5, new InstantAction(() -> {
+                    slidePosition = 0;
+                }))
+
+                .afterTime(5, new InstantAction(() -> {
+                    slidePosition = 0;
+                })) // score 2nd piece
+
+                .waitSeconds(6.5)
 
                 .turn(Math.toRadians(225))
                 .waitSeconds(.5)
                 .splineToLinearHeading(new Pose2d(26, 12, Math.toRadians(180)), Math.toRadians(89))
-                .waitSeconds(.5) //park
+                .waitSeconds(.5) // park
 
                 .build();
 
@@ -160,7 +217,12 @@ public class CompetitionRoadRunner extends LinearOpMode {
 
         Actions.runBlocking(
                 new SequentialAction(
-                        tab
+                        initSystems(),
+                        new ParallelAction(
+                                tab,
+                                slideMovement(telemetry),
+                                swivelMovement(telemetry)
+                        )
 //                        Example
 //                        trajectoryActionChosen,
 //                        lift.liftUp(),
@@ -168,6 +230,55 @@ public class CompetitionRoadRunner extends LinearOpMode {
 //                        lift.liftDown(),
 //                        trajectoryActionCloseOut
                 )
+        );
+    }
+
+public Action slideMovement(Telemetry telemetry) {
+    return new Action() {
+        private boolean initialized = false;
+        @Override
+        public boolean run(@NonNull TelemetryPacket packet) {
+            if (!initialized) {
+                initialized = true;
+            }
+
+            linearSlide.slideToPresetPositionAuto(slidePosition, telemetry);
+            telemetry.addData("Roadrunner, Target Position", slidePosition);
+//            if (Math.abs(linearSlide.linearSlideLeft.getCurrentPosition() - slidePosition) < 30
+//                    || Math.abs(linearSlide.linearSlideRight.getCurrentPosition() - slidePosition) < 30) {
+//                return false;
+//            }
+            return true;
+        }
+    };
+}
+
+public Action swivelMovement(Telemetry telemetry) {
+        return new Action() {
+            private boolean initialized = false;
+            @Override
+            public boolean run(@NonNull TelemetryPacket packet) {
+                if (!initialized) {
+                    initialized = true;
+                }
+
+                swivel.swivelToPresetPosition(swivelPosition, telemetry);
+                telemetry.addData("Roadrunner, Swivel Current Position", swivel.getSwivelPosition());
+                telemetry.addData("Roadrunner, Swivel Target Position", swivelPosition);
+                telemetry.addData("Roadrunner, Swivel Power Position", swivel.swivel.getPower());
+//                if (Math.abs(swivel.swivel.getCurrentPosition() - swivelPosition) < 30) {
+//                    return false;
+//                }
+                return true;
+            }
+        };
+    }
+
+    public Action initSystems() {
+        return new SequentialAction(
+                new InstantAction(() -> {
+                    claw.close();
+                })
         );
     }
 }

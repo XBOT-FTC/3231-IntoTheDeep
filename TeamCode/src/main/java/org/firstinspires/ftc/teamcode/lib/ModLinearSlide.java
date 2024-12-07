@@ -17,8 +17,8 @@ import org.firstinspires.ftc.teamcode.lib.NewSwivel;
 */
 public class ModLinearSlide {
 
-    private DcMotor linearSlideLeft = null;
-    private DcMotor linearSlideRight = null;
+    public DcMotor linearSlideLeft = null;
+    public DcMotor linearSlideRight = null;
     public int maxPosition = 0;
     public int maxPositionSwivel = 0;
     public double power = 0;

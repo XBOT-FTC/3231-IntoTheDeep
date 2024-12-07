@@ -11,7 +11,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 public class ModSwivel {
 
-    private DcMotor swivel = null;
+    public DcMotor swivel = null;
     public int maxPosition = 0;
     public double power = 0;
 
