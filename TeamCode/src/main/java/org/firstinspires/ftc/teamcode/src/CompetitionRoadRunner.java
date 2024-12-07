@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.src;
 
+import androidx.annotation.NonNull;
+
 import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -17,11 +19,12 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.MecanumDrive;
-import org.firstinspires.ftc.teamcode.lib.NewLinearSlide;
-import org.firstinspires.ftc.teamcode.lib.NewSwivel;
+import org.firstinspires.ftc.teamcode.lib.ModLinearSlide;
+import org.firstinspires.ftc.teamcode.lib.ModSwivel;
 
-@Autonomous(name="District 2 Auto", group="group")
+@Autonomous(name="Basket Auto", group="Auto")
 public class CompetitionRoadRunner extends LinearOpMode {
     /**
      * Override this method and place your code here.
@@ -34,44 +37,172 @@ public class CompetitionRoadRunner extends LinearOpMode {
      * @throws InterruptedException When the OpMode is stopped while calling a method
      *                              that can throw {@link InterruptedException}
      */
+
+    public Claw claw;
+
+    public ModSwivel swivel;
+
+    public ModLinearSlide linearSlide;
+
+    int slidePosition;
+
+    int swivelPosition;
+
     @Override
     public void runOpMode() throws InterruptedException {
 
-        Claw claw = new Claw(hardwareMap, telemetry);
+        slidePosition = 0;
+        swivelPosition = 0;
 
-        NewSwivel swivel = new NewSwivel(hardwareMap, DcMotorSimple.Direction.FORWARD);
+        claw = new Claw(hardwareMap, telemetry);
+
+        swivel = new ModSwivel(hardwareMap, DcMotorSimple.Direction.FORWARD);
         swivel.setSwivelPower(0.5);
-        swivel.setTickChange(40);
         swivel.setMaxPosition(3000);
-        swivel.setSpecimenPosition(1400);
-        swivel.setBasketPosition(1440);
-        swivel.setIntakeUpPosition(200);
-        swivel.setZeroPosition(0);
 
-        NewLinearSlide linearSlide = new NewLinearSlide(hardwareMap, DcMotorSimple.Direction.FORWARD);
+        linearSlide = new ModLinearSlide(hardwareMap, DcMotorSimple.Direction.FORWARD);
         linearSlide.setSlidePower(1);
         linearSlide.setMaxPosition(3680);
-        linearSlide.setTickChange(60);
-        linearSlide.setBasketPosition(3600);
-        linearSlide.setSpecimenPosition(1440);
-        linearSlide.setZeroPosition(0);
         linearSlide.setMaxPositionForDown(2775);
+        linearSlide.setTickChange(60);
+        linearSlide.setZeroPosition(0);
+        linearSlide.setBasketPositionSlides(3600);
+        linearSlide.setSpecimenPositionSlides(1440);
+        linearSlide.setIntakeSubPositionSwivel(200);
+        linearSlide.setSpecimenPositionSwivel(1400);
+        linearSlide.setBasketPositionSwivel(1440);
 
-        Pose2d initialPose = new Pose2d(0, 0, Math.toRadians(0)); // TODO: CHANGE THIS
+
+        Pose2d initialPose = new Pose2d(24, 63, Math.toRadians(270)); // TODO: CHANGE THIS
         MecanumDrive drive = new MecanumDrive(hardwareMap, initialPose);
 
-        TrajectoryActionBuilder tab = drive.actionBuilder(initialPose)
-                .setTangent(Math.toRadians(90))
-                .splineToSplineHeading(new Pose2d(-9, -37, Math.toRadians(270)), Math.toRadians(90))
-                .waitSeconds(0.5)
+        Action tab = drive.actionBuilder(initialPose)
+                .setTangent(Math.toRadians(270))
 
-                //raise arm
-                .afterTime(0, new InstantAction(() -> {
-                    armSlidePosition = ArmSlide.SlidePositions.LOW_SPECIMEN;
+                .splineToLinearHeading(new Pose2d(54, 54, Math.toRadians(45)), Math.toRadians(91))
+
+                .afterTime(.5, new InstantAction(() -> {
+                    swivelPosition = 1440;
                 }))
+                .afterTime(5.5, new InstantAction(() -> {
+                    slidePosition = 1440;
+                }))
+
+                .afterTime(9, new InstantAction(() -> {
+                    claw.open();
+                }))
+
+                .afterTime(6.5, new InstantAction(() -> {
+                    claw.close();
+                }))
+
+                .afterTime(7, new InstantAction(() -> {
+                    slidePosition = 0;
+                }))
+
+                .afterTime(5, new InstantAction(() -> {
+                    swivelPosition = 0;
+                })) // score preloaded piece
+
+                .waitSeconds(23)
+
+                .splineToLinearHeading(new Pose2d(49, 45, Math.toRadians(270)), Math.toRadians(89))
+
+                .lineToY(38)
+
+                .afterTime(0, new InstantAction(() -> {
+                    claw.open();
+                }))
+
+                .afterTime(1, new InstantAction(() -> {
+                    claw.close(); // grab 1st piece
+                }))
+
+                .waitSeconds(1.5)
+
+                .lineToY(45)
+
+                .splineToLinearHeading(new Pose2d(54, 54, Math.toRadians(45)), Math.toRadians(89))
+                .waitSeconds(.5)
+
+                .afterTime(5, new InstantAction(() -> {
+                    slidePosition = 1440;
+                }))
+
+                .afterTime(5, new InstantAction(() -> {
+                    slidePosition = 1440;
+                }))
+
+                .afterTime(4, new InstantAction(() -> {
+                    claw.open();
+                }))
+
+                .afterTime(1, new InstantAction(() -> {
+                    claw.close();
+                }))
+
+                .afterTime(5, new InstantAction(() -> {
+                    slidePosition = 0;
+                }))
+
+                .afterTime(5, new InstantAction(() -> {
+                    slidePosition = 0;
+                })) // score 1st piece
+
+                .waitSeconds(6.5)
+
+                .splineToLinearHeading(new Pose2d(59, 45, Math.toRadians(270)), Math.toRadians(89))
+                .lineToY(38)
+
+                .afterTime(0, new InstantAction(() -> {
+                    claw.open();
+                }))
+
+                .afterTime(1, new InstantAction(() -> {
+                    claw.close();
+                })) // grab 2nd piece
+
+                .waitSeconds(1.5)
+
+                .splineToLinearHeading(new Pose2d(54, 54, Math.toRadians(45)), Math.toRadians(89))
+                .waitSeconds(.5)
+
+                .afterTime(5, new InstantAction(() -> {
+                    slidePosition = 1440;
+                }))
+
+                .afterTime(5, new InstantAction(() -> {
+                    slidePosition = 1440;
+                }))
+
+                .afterTime(4, new InstantAction(() -> {
+                    claw.open();
+                }))
+
+                .afterTime(1, new InstantAction(() -> {
+                    claw.close();
+                }))
+
+                .lineToY(52)
+                .lineToX(52)
+
+                .afterTime(5, new InstantAction(() -> {
+                    slidePosition = 0;
+                }))
+
+                .afterTime(5, new InstantAction(() -> {
+                    slidePosition = 0;
+                })) // score 2nd piece
+
+                .waitSeconds(6.5)
+
+                .turn(Math.toRadians(225))
+                .waitSeconds(.5)
+                .splineToLinearHeading(new Pose2d(26, 12, Math.toRadians(180)), Math.toRadians(89))
+                .waitSeconds(.5) // park
+
                 .build();
 
-        Action trajectoryAction = tab.build();
 
         // Initialization
         while (!isStopRequested() && !opModeIsActive()) {
@@ -81,8 +212,16 @@ public class CompetitionRoadRunner extends LinearOpMode {
 
         if (isStopRequested()) return;
 
+        waitForStart();
+
         Actions.runBlocking(
                 new SequentialAction(
+                        initSystems(),
+                        new ParallelAction(
+                                tab,
+                                slideMovement(telemetry),
+                                swivelMovement(telemetry)
+                        )
 //                        Example
 //                        trajectoryActionChosen,
 //                        lift.liftUp(),
@@ -90,6 +229,57 @@ public class CompetitionRoadRunner extends LinearOpMode {
 //                        lift.liftDown(),
 //                        trajectoryActionCloseOut
                 )
+        );
+    }
+
+public Action slideMovement(Telemetry telemetry) {
+    return new Action() {
+        private boolean initialized = false;
+        @Override
+        public boolean run(@NonNull TelemetryPacket packet) {
+            if (!initialized) {
+                initialized = true;
+            }
+
+            linearSlide.slideToPresetPositionAuto(slidePosition, telemetry);
+            telemetry.addData("Roadrunner, LinearSlide Current Position", linearSlide.linearSlideLeft.getCurrentPosition());
+            telemetry.addData("Roadrunner, LinearSlide Target Position", slidePosition);
+            telemetry.addData("Roadrunner, LinearSlide Power Position", linearSlide.linearSlideLeft.getPower());
+//            if (Math.abs(linearSlide.linearSlideLeft.getCurrentPosition() - slidePosition) < 30
+//                    || Math.abs(linearSlide.linearSlideRight.getCurrentPosition() - slidePosition) < 30) {
+//                return false;
+//            }
+            return true;
+        }
+    };
+}
+
+public Action swivelMovement(Telemetry telemetry) {
+        return new Action() {
+            private boolean initialized = false;
+            @Override
+            public boolean run(@NonNull TelemetryPacket packet) {
+                if (!initialized) {
+                    initialized = true;
+                }
+
+                swivel.swivelToPresetPosition(swivelPosition, telemetry);
+                telemetry.addData("Roadrunner, Swivel Current Position", swivel.getSwivelPosition());
+                telemetry.addData("Roadrunner, Swivel Target Position", swivelPosition);
+                telemetry.addData("Roadrunner, Swivel Power Position", swivel.swivel.getPower());
+//                if (Math.abs(swivel.swivel.getCurrentPosition() - swivelPosition) < 30) {
+//                    return false;
+//                }
+                return true;
+            }
+        };
+    }
+
+    public Action initSystems() {
+        return new SequentialAction(
+                new InstantAction(() -> {
+                    claw.close();
+                })
         );
     }
 }

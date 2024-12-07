@@ -8,9 +8,9 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.MecanumDrive;
-import org.firstinspires.ftc.teamcode.lib.Grabber;
-import org.firstinspires.ftc.teamcode.lib.LinearSlide;
-import org.firstinspires.ftc.teamcode.lib.Swivel;
+import org.firstinspires.ftc.teamcode.src.Claw;
+import org.firstinspires.ftc.teamcode.lib.ModLinearSlide;
+import org.firstinspires.ftc.teamcode.lib.ModSwivel;
 import org.firstinspires.ftc.teamcode.src.Claw;
 
 @Disabled
@@ -20,8 +20,8 @@ public class HighBasketAuto extends LinearOpMode {
     public void runOpMode() {
 
         Claw claw = new Claw(hardwareMap, telemetry);
-        LinearSlide slide = new LinearSlide(hardwareMap, DcMotorSimple.Direction.FORWARD);
-        Swivel swivel = new Swivel(hardwareMap,DcMotorSimple.Direction.FORWARD);
+        ModLinearSlide slide = new ModLinearSlide(hardwareMap, DcMotorSimple.Direction.FORWARD);
+        ModSwivel swivel = new ModSwivel(hardwareMap,DcMotorSimple.Direction.FORWARD);
         Pose2d startingPos = new Pose2d(-24,63, Math.toRadians(-90));
 //                .splineTo(new Vector2d(0,37), Math.toRadians(-90))
 //                .waitSeconds(1)

@@ -11,7 +11,7 @@ public class Claw {
     Servo clawServo = null;
     boolean buttonPress;
     double closePosition = 1;
-    double openPosition = 0;
+    double openPosition = 0.25;
     boolean grabMode = false;
 
     public Claw(HardwareMap hardwareMap, Telemetry telemetry) {

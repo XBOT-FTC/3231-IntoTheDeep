@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.lib;
 
+import androidx.annotation.NonNull;
+
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Gamepad;
@@ -9,7 +11,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 public class ModSwivel {
 
-    private DcMotor swivel = null;
+    public DcMotor swivel = null;
     public int maxPosition = 0;
     public double power = 0;
 
@@ -22,6 +24,27 @@ public class ModSwivel {
         swivel.setDirection(direction);
     }
 
+//    public void swivelToPresetPositionManual(int scoringPosition, Telemetry telemetry, boolean downWard) {
+//        swivel.setTargetPosition(scoringPosition);
+//        swivel.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//        swivel.setPower(power);
+//
+////        if (Math.abs(swivel.getCurrentPosition()) < 70) {
+////            swivel.setPower(0);
+////            telemetry.addLine("WITHIN 70 ticks OF 0, SWIVEL");
+////        }
+//
+//        if (downWard && scoringPosition < 30 &&
+//                Math.abs(swivel.getCurrentPosition()) < 25) {
+//            swivel.setPower(0);
+//        }
+//        int currentPosition = swivel.getCurrentPosition();
+//        telemetry.addData("Current Swivel Position", currentPosition);
+//        telemetry.addData("Swivel Goal Position", scoringPosition);
+//        telemetry.addData("Swivel Power", power);
+//        telemetry.addData("Actual Power", swivel.getPower());
+//    }
+
     public void swivelToPresetPosition(int scoringPosition, Telemetry telemetry) {
         swivel.setTargetPosition(scoringPosition);
         swivel.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -32,12 +55,19 @@ public class ModSwivel {
 //            telemetry.addLine("WITHIN 70 ticks OF 0, SWIVEL");
 //        }
 
+        if (scoringPosition < 30 &&
+                Math.abs(swivel.getCurrentPosition()) < 25) {
+            swivel.setPower(0);
+            telemetry.addLine("WITHIN 25 TICKS SWIVEL");
+        }
+        telemetry.addLine("RAHHHHHHHHHHH");
         int currentPosition = swivel.getCurrentPosition();
         telemetry.addData("Current Swivel Position", currentPosition);
-        telemetry.addData("Swivel Goal Position", scoringPosition);
+        telemetry.addData("Swivel Goal/Target Position", scoringPosition);
         telemetry.addData("Swivel Power", power);
         telemetry.addData("Actual Power", swivel.getPower());
     }
+
 
     public void setSwivelPower(double power) {
         this.power = power;
@@ -48,10 +78,22 @@ public class ModSwivel {
     }
 
     public boolean getSwivelIsZero() {
-        return swivel.getCurrentPosition() < 25;
+        return swivel.getCurrentPosition() < 50;
     }
 
     public int getSwivelPosition() {
         return swivel.getCurrentPosition();
     }
+
+//    public void actualSetTargetPosition(int scoringPosition, Telemetry telemetry) {
+//        swivel.setTargetPosition(scoringPosition);
+//        swivel.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//        swivel.setPower(power);
+//
+//        int currentPosition = swivel.getCurrentPosition();
+//        telemetry.addData("Current Swivel Position", currentPosition);
+//        telemetry.addData("Swivel Goal Position", scoringPosition);
+//        telemetry.addData("Swivel Power", power);
+//        telemetry.addData("Actual Power", swivel.getPower());
+//    }
 }
