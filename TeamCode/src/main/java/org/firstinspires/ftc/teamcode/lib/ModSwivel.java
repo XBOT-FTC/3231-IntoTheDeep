@@ -33,6 +33,12 @@ public class ModSwivel {
 //            swivel.setPower(0);
 //            telemetry.addLine("WITHIN 70 ticks OF 0, SWIVEL");
 //        }
+
+        if (scoringPosition < 30 &&
+                Math.abs(swivel.getCurrentPosition()) < 25) {
+            swivel.setPower(0);
+            telemetry.addLine("WITHIN 25 TICKS SWIVEL");
+        }
         telemetry.addLine("RAHHHHHHHHHHH");
         int currentPosition = swivel.getCurrentPosition();
         telemetry.addData("Current Swivel Position", currentPosition);

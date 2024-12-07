@@ -42,6 +42,8 @@ public class ModLinearSlide {
 
     public boolean aPress = false;
     public boolean manualMode = false;
+    private long lastUpdateTime = 0;
+    private final long updateInterval = 50;
 
     public ModLinearSlide(HardwareMap hardwareMap, DcMotorSimple.Direction direction) {
         linearSlideLeft = hardwareMap.get(DcMotor.class, "l_slide");
@@ -80,7 +82,7 @@ public class ModLinearSlide {
     }
 
     public void slidesManual(Gamepad gamepad, Telemetry telemetry, boolean swivelIsZero) {
-        if (gamepad.right_trigger > 0) {
+        if (gamepad.left_trigger > 0) {
             if (swivelIsZero) {
                 manualPositionSlides += tickChange;
                 manualPositionSlides = Math.min(manualPositionSlides, maxPositionDownSlides);
@@ -88,7 +90,7 @@ public class ModLinearSlide {
                 manualPositionSlides += tickChange;
                 manualPositionSlides = Math.min(manualPositionSlides, maxPosition);
             }
-        } else if (gamepad.left_trigger > 0) {
+        } else if (gamepad.right_trigger > 0) {
             manualPositionSlides -= tickChange;
             manualPositionSlides = Math.max(manualPositionSlides, 0);
         }
@@ -120,20 +122,66 @@ public class ModLinearSlide {
     }
 
     public void swivelManual(Gamepad gamepad, ModSwivel swivel, Telemetry telemetry) {
-        if (gamepad.dpad_right) {
+        if (gamepad.left_bumper) {
             manualPositionSwivel += tickChangeSwivel;
             manualPositionSwivel = Math.min(manualPositionSwivel, maxPositionSwivel);
             telemetry.addLine("BROOOOOOOOOOOOO");
+            telemetry.addData("MANUAL POSITION SWIVEL", manualPositionSwivel);
             swivel.swivelToPresetPosition(manualPositionSwivel, telemetry);
-        } else if (gamepad.dpad_down) {
+
+        } else if (gamepad.right_bumper) {
             manualPositionSwivel -= tickChangeSwivel;
             manualPositionSwivel = Math.max(manualPositionSwivel, 0);
-            telemetry.addLine("AHHHHHHHHH");
+            telemetry.addData("MANUAL POSITION SWIVEL", manualPositionSwivel);
             swivel.swivelToPresetPosition(manualPositionSwivel, telemetry);
-        }
-//        swivel.actualSetTargetPosition(manualPositionSwivel, telemetry);
 
+        }
+        telemetry.update();
     }
+
+//
+////        if (gamepad.right_trigger > 0) {
+////            positionManual += tickChange;
+////            positionManual = Math.min(positionManual, maxPosition);
+////        } else if (gamepad.left_trigger > 0) {
+////            positionManual -= tickChange;
+////            positionManual = Math.max(positionManual, 0);
+////        }
+////
+////        if (Math.abs(swivel.getCurrentPosition()) < 25) {
+////            swivel.setPower(0);
+////            telemetry.addLine("WITHIN 25 ticks SWIVEL MANUAL");
+////        }
+//
+////        swivel.actualSetTargetPosition(manualPositionSwivel, telemetry);
+//
+//    }
+
+//    public void swivelManual(Gamepad gamepad, ModSwivel swivel, Telemetry telemetry) {
+//        long currentTime = System.currentTimeMillis(); // Get the current time
+//
+//        if (currentTime - lastUpdateTime >= updateInterval) {
+//            if (gamepad.left_bumper) {
+//                manualPositionSwivel += tickChangeSwivel;
+//                manualPositionSwivel = Math.min(manualPositionSwivel, maxPositionSwivel);
+//                telemetry.addLine("Increasing Swivel");
+//            } else if (gamepad.right_bumper) {
+//                manualPositionSwivel -= tickChangeSwivel;
+//                manualPositionSwivel = Math.max(manualPositionSwivel, 0);
+//                telemetry.addLine("Decreasing Swivel");
+//            }
+//
+//            telemetry.addData("MANUAL SWIVEL POSITION", manualPositionSwivel);
+//
+//            swivel.swivelToPresetPosition(manualPositionSwivel, telemetry);
+//            // Update the last update time
+//            lastUpdateTime = currentTime;
+//            telemetry.update();
+//        }
+//
+//        // Always send telemetry data for debugging
+//
+//    }
 
     public int setScoringPosition(Gamepad gamepad, ModSwivel swivel, Telemetry telemetry) {
         // ---- BASKET ----
