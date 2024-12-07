@@ -123,17 +123,17 @@ public class ModLinearSlide {
 
     public void swivelManual(Gamepad gamepad, ModSwivel swivel, Telemetry telemetry) {
         if (gamepad.left_bumper) {
-            manualPositionSwivel += tickChangeSwivel;
+            manualPositionSwivel = swivel.getSwivelPosition() + tickChangeSwivel;
             manualPositionSwivel = Math.min(manualPositionSwivel, maxPositionSwivel);
             telemetry.addLine("BROOOOOOOOOOOOO");
             telemetry.addData("MANUAL POSITION SWIVEL", manualPositionSwivel);
-            swivel.swivelToPresetPosition(manualPositionSwivel, telemetry);
+            swivel.swivelToPresetPosition(manualPositionSwivel, telemetry, true);
 
         } else if (gamepad.right_bumper) {
-            manualPositionSwivel -= tickChangeSwivel;
+            manualPositionSwivel = swivel.getSwivelPosition() - tickChangeSwivel;
             manualPositionSwivel = Math.max(manualPositionSwivel, 0);
             telemetry.addData("MANUAL POSITION SWIVEL", manualPositionSwivel);
-            swivel.swivelToPresetPosition(manualPositionSwivel, telemetry);
+            swivel.swivelToPresetPosition(manualPositionSwivel, telemetry, false);
 
         }
         telemetry.update();

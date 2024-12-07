@@ -24,7 +24,7 @@ public class ModSwivel {
         swivel.setDirection(direction);
     }
 
-    public void swivelToPresetPosition(int scoringPosition, Telemetry telemetry) {
+    public void swivelToPresetPosition(int scoringPosition, Telemetry telemetry, boolean downWard) {
         swivel.setTargetPosition(scoringPosition);
         swivel.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         swivel.setPower(power);
@@ -34,7 +34,7 @@ public class ModSwivel {
 //            telemetry.addLine("WITHIN 70 ticks OF 0, SWIVEL");
 //        }
 
-        if (scoringPosition < 30 &&
+        if (downWard && scoringPosition < 30 &&
                 Math.abs(swivel.getCurrentPosition()) < 25) {
             swivel.setPower(0);
             telemetry.addLine("WITHIN 25 TICKS SWIVEL");
