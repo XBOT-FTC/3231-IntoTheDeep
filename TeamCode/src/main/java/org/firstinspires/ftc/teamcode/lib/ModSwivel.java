@@ -47,6 +47,23 @@ public class ModSwivel {
         telemetry.addData("Actual Power", swivel.getPower());
     }
 
+    public void swivelToPresetPositionAuto(int scoringPosition, Telemetry telemetry) {
+        swivel.setTargetPosition(scoringPosition);
+        swivel.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        swivel.setPower(power);
+
+//        if (Math.abs(swivel.getCurrentPosition()) < 70) {
+//            swivel.setPower(0);
+//            telemetry.addLine("WITHIN 70 ticks OF 0, SWIVEL");
+//        }
+
+        int currentPosition = swivel.getCurrentPosition();
+        telemetry.addData("Current Swivel Position", currentPosition);
+        telemetry.addData("Swivel Goal Position", scoringPosition);
+        telemetry.addData("Swivel Power", power);
+        telemetry.addData("Actual Power", swivel.getPower());
+    }
+
     public void setSwivelPower(double power) {
         this.power = power;
     }

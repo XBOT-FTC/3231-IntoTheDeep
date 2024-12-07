@@ -240,6 +240,26 @@ public class ModLinearSlide {
         }
     }
 
+    public void slideToPresetPositionAuto(int scoringPosition, Telemetry telemetry) {
+        linearSlideLeft.setTargetPosition(-scoringPosition);
+        linearSlideRight.setTargetPosition(-scoringPosition);
+        linearSlideLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        linearSlideRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        linearSlideLeft.setPower(power);
+        linearSlideRight.setPower(power);
+
+        int currentPositionLeft = linearSlideLeft.getCurrentPosition();
+        int currentPositionRight = linearSlideRight.getCurrentPosition();
+        telemetry.addData("Current Left Slide Position", currentPositionLeft);
+        telemetry.addData("Current Right Slide Position", currentPositionRight);
+        telemetry.addData("Target Left Slide Position", linearSlideLeft.getTargetPosition());
+        telemetry.addData("Target Right Slide Position", linearSlideRight.getTargetPosition());
+        telemetry.addData("Slide Goal Position", scoringPosition);
+        telemetry.addData("Linear Slide Power", power);
+        telemetry.addData("Linear Slide left Actual Power", linearSlideLeft.getPower());
+        telemetry.addData("Linear Slide right Actual Power", linearSlideRight.getPower());
+    }
+
 
     public void setSlidePower(double power) {
         this.power = power;
@@ -289,25 +309,47 @@ public class ModLinearSlide {
         tickChangeSwivel = change;
     }
 
-    public void scoreBasketPosition(ModSwivel swivel, Telemetry telemetry, boolean isSwivelCheck, Gamepad gamepad) {
-        swivel.swivelToPresetPosition(basketPositionSwivel, telemetry);
+//    public void scoreBasketPosition(ModSwivel swivel, Telemetry telemetry, boolean isSwivelCheck, Gamepad gamepad) {
+//        swivel.swivelToPresetPosition(basketPositionSwivel, telemetry);
+//        if (swivel.getSwivelPosition() >= basketPositionSwivel - thresholdUp) {
+//            slideToPresetPosition(basketPositionSlides, telemetry, isSwivelCheck, gamepad, swivel);
+//        }
+//    }
+
+    public void scoreBasketPositionAuto(ModSwivel swivel, Telemetry telemetry) {
+        swivel.swivelToPresetPositionAuto(basketPositionSwivel, telemetry);
         if (swivel.getSwivelPosition() >= basketPositionSwivel - thresholdUp) {
-            slideToPresetPosition(basketPositionSlides, telemetry, isSwivelCheck, gamepad, swivel);
+            slideToPresetPositionAuto(basketPositionSlides, telemetry);
         }
     }
 
-    public void scoreSpecimenPosition(ModSwivel swivel, Telemetry telemetry, boolean isSwivelCheck, Gamepad gamepad) {
-        swivel.swivelToPresetPosition(specimenPositionSwivel, telemetry);
+//    public void scoreSpecimenPosition(ModSwivel swivel, Telemetry telemetry, boolean isSwivelCheck, Gamepad gamepad) {
+//        swivel.swivelToPresetPosition(specimenPositionSwivel, telemetry);
+//        if (swivel.getSwivelPosition() >= specimenPositionSwivel - thresholdUp) {
+//            slideToPresetPosition(specimenPositionSlides, telemetry, isSwivelCheck, gamepad, swivel);
+//        }
+//    }
+
+    public void scoreSpecimenPositionAuto(ModSwivel swivel, Telemetry telemetry) {
+        swivel.swivelToPresetPositionAuto(specimenPositionSwivel, telemetry);
         if (swivel.getSwivelPosition() >= specimenPositionSwivel - thresholdUp) {
-            slideToPresetPosition(specimenPositionSlides, telemetry, isSwivelCheck, gamepad, swivel);
+            slideToPresetPositionAuto(specimenPositionSlides, telemetry);
         }
     }
+//
+//    public void setSwivelAndLinearSlidesDown(ModSwivel swivel, Telemetry telemetry, boolean isSwivelCheck, Gamepad gamepad) {
+//        slideToPresetPosition(zeroPosition, telemetry, isSwivelCheck, gamepad, swivel);
+//        if (linearSlideLeft.getCurrentPosition() <= thresholdDown ||
+//                linearSlideRight.getCurrentPosition() <= thresholdDown) {
+//            swivel.swivelToPresetPosition(zeroPosition, telemetry);
+//        }
+//    }
 
-    public void setSwivelAndLinearSlidesDown(ModSwivel swivel, Telemetry telemetry, boolean isSwivelCheck, Gamepad gamepad) {
-        slideToPresetPosition(zeroPosition, telemetry, isSwivelCheck, gamepad, swivel);
+    public void setSwivelAndLinearSlidesDownAuto(ModSwivel swivel, Telemetry telemetry) {
+        slideToPresetPositionAuto(zeroPosition, telemetry);
         if (linearSlideLeft.getCurrentPosition() <= thresholdDown ||
                 linearSlideRight.getCurrentPosition() <= thresholdDown) {
-            swivel.swivelToPresetPosition(zeroPosition, telemetry);
+            swivel.swivelToPresetPositionAuto(zeroPosition, telemetry);
         }
     }
 
