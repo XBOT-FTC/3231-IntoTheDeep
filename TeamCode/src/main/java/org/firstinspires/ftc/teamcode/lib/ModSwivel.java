@@ -24,7 +24,7 @@ public class ModSwivel {
         swivel.setDirection(direction);
     }
 
-    public void swivelToPresetPosition(int scoringPosition, Telemetry telemetry, boolean downWard) {
+    public void swivelToPresetPositionManual(int scoringPosition, Telemetry telemetry, boolean downWard) {
         swivel.setTargetPosition(scoringPosition);
         swivel.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         swivel.setPower(power);
@@ -47,7 +47,7 @@ public class ModSwivel {
         telemetry.addData("Actual Power", swivel.getPower());
     }
 
-    public void swivelToPresetPositionAuto(int scoringPosition, Telemetry telemetry) {
+    public void swivelToPresetPosition(int scoringPosition, Telemetry telemetry) {
         swivel.setTargetPosition(scoringPosition);
         swivel.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         swivel.setPower(power);
@@ -57,12 +57,19 @@ public class ModSwivel {
 //            telemetry.addLine("WITHIN 70 ticks OF 0, SWIVEL");
 //        }
 
+        if (scoringPosition < 30 &&
+                Math.abs(swivel.getCurrentPosition()) < 25) {
+            swivel.setPower(0);
+            telemetry.addLine("WITHIN 25 TICKS SWIVEL");
+        }
+        telemetry.addLine("RAHHHHHHHHHHH");
         int currentPosition = swivel.getCurrentPosition();
         telemetry.addData("Current Swivel Position", currentPosition);
         telemetry.addData("Swivel Goal Position", scoringPosition);
         telemetry.addData("Swivel Power", power);
         telemetry.addData("Actual Power", swivel.getPower());
     }
+
 
     public void setSwivelPower(double power) {
         this.power = power;

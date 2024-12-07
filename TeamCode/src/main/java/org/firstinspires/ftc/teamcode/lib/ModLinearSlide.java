@@ -127,13 +127,13 @@ public class ModLinearSlide {
             manualPositionSwivel = Math.min(manualPositionSwivel, maxPositionSwivel);
             telemetry.addLine("BROOOOOOOOOOOOO");
             telemetry.addData("MANUAL POSITION SWIVEL", manualPositionSwivel);
-            swivel.swivelToPresetPosition(manualPositionSwivel, telemetry, true);
+            swivel.swivelToPresetPositionManual(manualPositionSwivel, telemetry, true);
 
         } else if (gamepad.right_bumper) {
             manualPositionSwivel = swivel.getSwivelPosition() - tickChangeSwivel;
             manualPositionSwivel = Math.max(manualPositionSwivel, 0);
             telemetry.addData("MANUAL POSITION SWIVEL", manualPositionSwivel);
-            swivel.swivelToPresetPosition(manualPositionSwivel, telemetry, false);
+            swivel.swivelToPresetPositionManual(manualPositionSwivel, telemetry, false);
 
         }
         telemetry.update();
@@ -317,7 +317,7 @@ public class ModLinearSlide {
 //    }
 
     public void scoreBasketPositionAuto(ModSwivel swivel, Telemetry telemetry) {
-        swivel.swivelToPresetPositionAuto(basketPositionSwivel, telemetry);
+        swivel.swivelToPresetPosition(basketPositionSwivel, telemetry);
         if (swivel.getSwivelPosition() >= basketPositionSwivel - thresholdUp) {
             slideToPresetPositionAuto(basketPositionSlides, telemetry);
         }
@@ -331,7 +331,7 @@ public class ModLinearSlide {
 //    }
 
     public void scoreSpecimenPositionAuto(ModSwivel swivel, Telemetry telemetry) {
-        swivel.swivelToPresetPositionAuto(specimenPositionSwivel, telemetry);
+        swivel.swivelToPresetPosition(specimenPositionSwivel, telemetry);
         if (swivel.getSwivelPosition() >= specimenPositionSwivel - thresholdUp) {
             slideToPresetPositionAuto(specimenPositionSlides, telemetry);
         }
@@ -349,7 +349,7 @@ public class ModLinearSlide {
         slideToPresetPositionAuto(zeroPosition, telemetry);
         if (linearSlideLeft.getCurrentPosition() <= thresholdDown ||
                 linearSlideRight.getCurrentPosition() <= thresholdDown) {
-            swivel.swivelToPresetPositionAuto(zeroPosition, telemetry);
+            swivel.swivelToPresetPosition(zeroPosition, telemetry);
         }
     }
 
