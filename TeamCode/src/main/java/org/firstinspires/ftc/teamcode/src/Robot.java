@@ -19,7 +19,7 @@ public class Robot extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
 
         TeleOpMecanumDrive teleOpMecanumDrive = new TeleOpMecanumDrive(hardwareMap, telemetry);
-        teleOpMecanumDrive.setPrecisionPower(0.5);
+        teleOpMecanumDrive.setPrecisionPower(0.25);
         teleOpMecanumDrive.setStrafeConstant(1.1);
         teleOpMecanumDrive.setDefaultSpeed(1.0);
 
@@ -51,6 +51,7 @@ public class Robot extends LinearOpMode {
         ModLinearSlide linearSlide = new ModLinearSlide(hardwareMap, DcMotorSimple.Direction.FORWARD);
         linearSlide.setSlidePower(1);
         linearSlide.setMaxPosition(3680);
+        linearSlide.setMaxPositionSwivel(3000);
 
         linearSlide.setBasketPositionSlides(3600);
         linearSlide.setSpecimenPositionSlides(1440);
@@ -63,6 +64,8 @@ public class Robot extends LinearOpMode {
         linearSlide.setZeroPosition(0);
 
         linearSlide.setTickChange(60);
+        linearSlide.setTickChangeSwivel(125);
+
 
 
         waitForStart();
