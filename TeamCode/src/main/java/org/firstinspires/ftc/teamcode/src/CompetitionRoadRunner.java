@@ -85,22 +85,22 @@ public class CompetitionRoadRunner extends LinearOpMode {
                     swivelPosition = 1440;
                 }))
                 .afterTime(5.5, new InstantAction(() -> {
-                    slidePosition = 1440;
+                    slidePosition = 3600;
                 }))
 
-                .afterTime(9, new InstantAction(() -> {
+                .afterTime(10.5, new InstantAction(() -> {
                     claw.open();
                 }))
 
-                .afterTime(6.5, new InstantAction(() -> {
+                .afterTime(11, new InstantAction(() -> {
                     claw.close();
                 }))
 
-                .afterTime(7, new InstantAction(() -> {
+                .afterTime(11.5, new InstantAction(() -> {
                     slidePosition = 0;
                 }))
 
-                .afterTime(5, new InstantAction(() -> {
+                .afterTime(16.5, new InstantAction(() -> {
                     swivelPosition = 0;
                 })) // score preloaded piece
 
