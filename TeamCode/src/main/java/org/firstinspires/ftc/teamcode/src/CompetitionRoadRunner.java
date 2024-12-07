@@ -39,18 +39,22 @@ public class CompetitionRoadRunner extends LinearOpMode {
 
         Claw claw = new Claw(hardwareMap, telemetry);
 
-        ModSwivel swivel = new NewSwivel(hardwareMap, DcMotorSimple.Direction.FORWARD);
+        ModSwivel swivel = new ModSwivel(hardwareMap, DcMotorSimple.Direction.FORWARD);
         swivel.setSwivelPower(0.5);
         swivel.setMaxPosition(3000);
 
-        ModLinearSlide linearSlide = new NewLinearSlide(hardwareMap, DcMotorSimple.Direction.FORWARD);
+        ModLinearSlide linearSlide = new ModLinearSlide(hardwareMap, DcMotorSimple.Direction.FORWARD);
         linearSlide.setSlidePower(1);
         linearSlide.setMaxPosition(3680);
-        linearSlide.setMaxPositionForDown();
-
+        linearSlide.setMaxPositionForDown(2775);
         linearSlide.setTickChange(60);
         linearSlide.setZeroPosition(0);
-        linearSlide.setMaxPositionForDown(2775);
+        linearSlide.setBasketPositionSlides(3600);
+        linearSlide.setSpecimenPositionSlides(1440);
+        linearSlide.setIntakeSubPositionSwivel(200);
+        linearSlide.setSpecimenPositionSwivel(1400);
+        linearSlide.setBasketPositionSwivel(1440);
+
 
         Pose2d initialPose = new Pose2d(24, 63, Math.toRadians(270)); // TODO: CHANGE THIS
         MecanumDrive drive = new MecanumDrive(hardwareMap, initialPose);
@@ -58,7 +62,7 @@ public class CompetitionRoadRunner extends LinearOpMode {
         Action tab = drive.actionBuilder(initialPose)
                 .setTangent(Math.toRadians(270))
 
-                .splineToLinearHeading(new Pose2d(56, 56, Math.toRadians(45)), Math.toRadians(135))
+                .splineToLinearHeading(new Pose2d(56, 56, Math.toRadians(45)), Math.toRadians(91))
 
                 .afterTime(0.5, new InstantAction(() -> {
                     linearSlide.scoreBasketPosition(swivel, telemetry);
@@ -74,11 +78,27 @@ public class CompetitionRoadRunner extends LinearOpMode {
 
                 .afterTime(.5, new InstantAction(() -> {
                     linearSlide.setSwivelAndLinearSlidesDown(swivel, telemetry);
-                }))
+                })) //preloaded piece
 
-                .splineToLinearHeading(new Pose2d(49, 40, Math.toRadians(270)), Math.toRadians(45))
+                .splineToLinearHeading(new Pose2d(49, 40, Math.toRadians(270)), Math.toRadians(89))
 
                 .afterTime(0, new InstantAction(() -> {
+                    claw.open();
+                }))
+
+                .afterTime(1, new InstantAction(() -> {
+                    claw.close(); //grab 1st piece
+                }))
+
+
+                .splineToLinearHeading(new Pose2d(56, 56, Math.toRadians(45)), Math.toRadians(89))
+                .waitSeconds(.5)
+
+                .afterTime(0.5, new InstantAction(() -> {
+                    linearSlide.scoreBasketPosition(swivel, telemetry);
+                }))
+
+                .afterTime(4, new InstantAction(() -> {
                     claw.open();
                 }))
 
@@ -86,23 +106,45 @@ public class CompetitionRoadRunner extends LinearOpMode {
                     claw.close();
                 }))
 
+                .afterTime(.5, new InstantAction(() -> {
+                    linearSlide.setSwivelAndLinearSlidesDown(swivel, telemetry);
+                })) //score 1st piece
 
-                .splineToLinearHeading(new Pose2d(56, 56, Math.toRadians(45)), Math.toRadians(45))
-                .waitSeconds(1)
-                .splineToLinearHeading(new Pose2d(58, 40, Math.toRadians(270)), Math.toRadians(45))
-                .waitSeconds(1)
-                .splineToLinearHeading(new Pose2d(56, 56, Math.toRadians(45)), Math.toRadians(45))
-                .waitSeconds(1)
-                .turn(Math.toRadians(225))
-                .waitSeconds(1)
-                .splineToLinearHeading(new Pose2d(26, 12, Math.toRadians(180)), Math.toRadians(75))
-                .waitSeconds(1)
+                .splineToLinearHeading(new Pose2d(58, 40, Math.toRadians(270)), Math.toRadians(89))
+                .waitSeconds(.5)
 
-                //raise arm
                 .afterTime(0, new InstantAction(() -> {
-                    swivel.setBasketPosition(1440);
-                    linearSlide.setBasketPosition(1440);
+                    claw.open();
                 }))
+
+                .afterTime(1, new InstantAction(() -> {
+                    claw.close();
+                })) //grab 2nd piece
+
+                .splineToLinearHeading(new Pose2d(56, 56, Math.toRadians(45)), Math.toRadians(89))
+                .waitSeconds(.5)
+
+                .afterTime(0.5, new InstantAction(() -> {
+                    linearSlide.scoreBasketPosition(swivel, telemetry);
+                }))
+
+                .afterTime(4, new InstantAction(() -> {
+                    claw.open();
+                }))
+
+                .afterTime(1, new InstantAction(() -> {
+                    claw.close();
+                }))
+
+                .afterTime(.5, new InstantAction(() -> {
+                    linearSlide.setSwivelAndLinearSlidesDown(swivel, telemetry);
+                })) //score 2nd piece
+
+                .turn(Math.toRadians(225))
+                .waitSeconds(.5)
+                .splineToLinearHeading(new Pose2d(26, 12, Math.toRadians(180)), Math.toRadians(89))
+                .waitSeconds(.5) //park
+
                 .build();
 
 
