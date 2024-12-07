@@ -24,6 +24,29 @@ public class ModSwivel {
         swivel.setDirection(direction);
     }
 
+    public void swivelToPresetPositionManual(int scoringPosition, Telemetry telemetry, boolean downWard) {
+        swivel.setTargetPosition(scoringPosition);
+        swivel.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        swivel.setPower(power);
+
+//        if (Math.abs(swivel.getCurrentPosition()) < 70) {
+//            swivel.setPower(0);
+//            telemetry.addLine("WITHIN 70 ticks OF 0, SWIVEL");
+//        }
+
+        if (downWard && scoringPosition < 30 &&
+                Math.abs(swivel.getCurrentPosition()) < 25) {
+            swivel.setPower(0);
+            telemetry.addLine("WITHIN 25 TICKS SWIVEL");
+        }
+        telemetry.addLine("RAHHHHHHHHHHH");
+        int currentPosition = swivel.getCurrentPosition();
+        telemetry.addData("Current Swivel Position", currentPosition);
+        telemetry.addData("Swivel Goal Position", scoringPosition);
+        telemetry.addData("Swivel Power", power);
+        telemetry.addData("Actual Power", swivel.getPower());
+    }
+
     public void swivelToPresetPosition(int scoringPosition, Telemetry telemetry) {
         swivel.setTargetPosition(scoringPosition);
         swivel.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -33,6 +56,12 @@ public class ModSwivel {
 //            swivel.setPower(0);
 //            telemetry.addLine("WITHIN 70 ticks OF 0, SWIVEL");
 //        }
+
+        if (scoringPosition < 30 &&
+                Math.abs(swivel.getCurrentPosition()) < 25) {
+            swivel.setPower(0);
+            telemetry.addLine("WITHIN 25 TICKS SWIVEL");
+        }
         telemetry.addLine("RAHHHHHHHHHHH");
         int currentPosition = swivel.getCurrentPosition();
         telemetry.addData("Current Swivel Position", currentPosition);
@@ -40,6 +69,7 @@ public class ModSwivel {
         telemetry.addData("Swivel Power", power);
         telemetry.addData("Actual Power", swivel.getPower());
     }
+
 
     public void setSwivelPower(double power) {
         this.power = power;
