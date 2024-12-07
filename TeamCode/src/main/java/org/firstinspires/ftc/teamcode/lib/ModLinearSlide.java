@@ -36,7 +36,7 @@ public class ModLinearSlide {
     public int zeroPosition = 0;
 
     public int thresholdUp = 110;
-    public int thresholdDown = 30;
+    public int thresholdDown = 175;
     public int tickChange = 0;
     public int tickChangeSwivel = 0;
 
@@ -127,13 +127,13 @@ public class ModLinearSlide {
             manualPositionSwivel = Math.min(manualPositionSwivel, maxPositionSwivel);
             telemetry.addLine("BROOOOOOOOOOOOO");
             telemetry.addData("MANUAL POSITION SWIVEL", manualPositionSwivel);
-            swivel.swivelToPresetPositionManual(manualPositionSwivel, telemetry, true);
+            swivel.swivelToPresetPosition(manualPositionSwivel, telemetry);
 
         } else if (gamepad.right_bumper) {
             manualPositionSwivel = swivel.getSwivelPosition() - tickChangeSwivel;
             manualPositionSwivel = Math.max(manualPositionSwivel, 0);
             telemetry.addData("MANUAL POSITION SWIVEL", manualPositionSwivel);
-            swivel.swivelToPresetPositionManual(manualPositionSwivel, telemetry, false);
+            swivel.swivelToPresetPosition(manualPositionSwivel, telemetry);
 
         }
         telemetry.update();
@@ -198,11 +198,13 @@ public class ModLinearSlide {
                 positionPreset = specimenPositionSlides;
             }
         } else {
-            telemetry.addLine("No button press ");
-            positionPreset = zeroPosition;
-            if (linearSlideLeft.getCurrentPosition() <= thresholdDown ||
-                    linearSlideRight.getCurrentPosition() <= thresholdDown) {
-                swivel.swivelToPresetPosition(zeroPosition, telemetry);
+            if (!manualMode) {
+                telemetry.addLine("No button press ");
+                positionPreset = zeroPosition;
+                if (linearSlideLeft.getCurrentPosition() >= -thresholdDown ||
+                        linearSlideRight.getCurrentPosition() >= -thresholdDown) {
+                    swivel.swivelToPresetPosition(zeroPosition, telemetry);
+                }
             }
         }
 
@@ -347,8 +349,8 @@ public class ModLinearSlide {
 
     public void setSwivelAndLinearSlidesDownAuto(ModSwivel swivel, Telemetry telemetry) {
         slideToPresetPositionAuto(zeroPosition, telemetry);
-        if (linearSlideLeft.getCurrentPosition() <= thresholdDown ||
-                linearSlideRight.getCurrentPosition() <= thresholdDown) {
+        if (linearSlideLeft.getCurrentPosition() >= -thresholdDown ||
+                linearSlideRight.getCurrentPosition() >= -thresholdDown) {
             swivel.swivelToPresetPosition(zeroPosition, telemetry);
         }
     }
