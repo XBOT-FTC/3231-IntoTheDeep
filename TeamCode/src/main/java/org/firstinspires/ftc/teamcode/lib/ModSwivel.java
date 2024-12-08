@@ -66,6 +66,7 @@ public class ModSwivel {
         telemetry.addData("Swivel Goal/Target Position", scoringPosition);
         telemetry.addData("Swivel Power", power);
         telemetry.addData("Actual Power", swivel.getPower());
+        telemetry.update();
     }
 
 
