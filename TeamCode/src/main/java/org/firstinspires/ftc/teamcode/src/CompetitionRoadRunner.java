@@ -120,7 +120,7 @@ public class CompetitionRoadRunner extends LinearOpMode {
 
                 .waitSeconds(.3)
 
-                .splineToLinearHeading(new Pose2d(54.8, 54.8, Math.toRadians(45)), Math.toRadians(89))
+                .splineToLinearHeading(new Pose2d(54.8, 54.8, Math.toRadians(40)), Math.toRadians(89))
 
                 .afterTime(.5, new InstantAction(() -> {
                     swivelPosition = 1440;
@@ -145,7 +145,7 @@ public class CompetitionRoadRunner extends LinearOpMode {
 
                 .splineToLinearHeading(new Pose2d(61.75, 45, Math.toRadians(270)), Math.toRadians(89))
 
-                .lineToY(39.5)
+                .lineToY(37.5)
 
                 .afterTime(.5, new InstantAction(() -> {
                     claw.close();
@@ -215,29 +215,29 @@ public class CompetitionRoadRunner extends LinearOpMode {
         );
     }
 
-public Action slideMovement(Telemetry telemetry) {
-    return new Action() {
-        private boolean initialized = false;
-        @Override
-        public boolean run(@NonNull TelemetryPacket packet) {
-            if (!initialized) {
-                initialized = true;
-            }
+    public Action slideMovement(Telemetry telemetry) {
+        return new Action() {
+            private boolean initialized = false;
+            @Override
+            public boolean run(@NonNull TelemetryPacket packet) {
+                if (!initialized) {
+                    initialized = true;
+                }
 
-            linearSlide.slideToPresetPositionAuto(slidePosition, telemetry);
-            telemetry.addData("Roadrunner, LinearSlide Current Position", linearSlide.linearSlideLeft.getCurrentPosition());
-            telemetry.addData("Roadrunner, LinearSlide Target Position", slidePosition);
-            telemetry.addData("Roadrunner, LinearSlide Power Position", linearSlide.linearSlideLeft.getPower());
+                linearSlide.slideToPresetPositionAuto(slidePosition, telemetry);
+                telemetry.addData("Roadrunner, LinearSlide Current Position", linearSlide.linearSlideLeft.getCurrentPosition());
+                telemetry.addData("Roadrunner, LinearSlide Target Position", slidePosition);
+                telemetry.addData("Roadrunner, LinearSlide Power Position", linearSlide.linearSlideLeft.getPower());
 //            if (Math.abs(linearSlide.linearSlideLeft.getCurrentPosition() - slidePosition) < 30
 //                    || Math.abs(linearSlide.linearSlideRight.getCurrentPosition() - slidePosition) < 30) {
 //                return false;
 //            }
-            return true;
-        }
-    };
-}
+                return true;
+            }
+        };
+    }
 
-public Action swivelMovement(Telemetry telemetry) {
+    public Action swivelMovement(Telemetry telemetry) {
         return new Action() {
             private boolean initialized = false;
             @Override
