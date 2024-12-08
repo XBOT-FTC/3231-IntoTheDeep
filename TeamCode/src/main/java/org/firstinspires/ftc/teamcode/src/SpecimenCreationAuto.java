@@ -79,6 +79,7 @@ public class SpecimenCreationAuto extends LinearOpMode {
         Action tab = drive.actionBuilder(initialPose)
 
                 .splineToLinearHeading(new Pose2d(-37,63,Math.toRadians(180)),Math.toRadians(180))
+                .lineToX(-37)
                 .waitSeconds(.5)
                 .strafeTo(new Vector2d(-37,12))
                 .waitSeconds(.5)

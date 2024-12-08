@@ -14,11 +14,27 @@ public class Specimen {
         RoadRunnerBotEntity myBot = new DefaultBotBuilder(meepMeep)
                 // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
                 .setConstraints(60, 60, Math.toRadians(180), Math.toRadians(90), 15)
-                .followTrajectorySequence(drive -> drive.trajectorySequenceBuilder(new Pose2d(-24, 63, Math.toRadians(270))) // right here is where u plug the starting coordinates points
-                        .splineTo(new Vector2d(0,37), Math.toRadians(-90))
-                        .waitSeconds(1)
-                        .back(5)
-                        .splineTo(new Vector2d(-47, 47), Math.toRadians(90))
+                .followTrajectorySequence(drive -> drive.trajectorySequenceBuilder(new Pose2d(-24, 63, Math.toRadians(180))) // right here is where u plug the starting coordinates points
+
+                        .lineTo(new Vector2d(-37,63))
+                        .waitSeconds(.5)
+                        .strafeTo(new Vector2d(-37,12))
+                        .waitSeconds(.5)
+                        .strafeTo(new Vector2d(-47,12))
+                        .waitSeconds(.5)
+                        .strafeTo(new Vector2d(-47, 58))
+                        .waitSeconds(.5)
+                        .strafeTo(new Vector2d(-47,12))
+                        .waitSeconds(.5)
+                        .strafeTo(new Vector2d(-57,12))
+                        .waitSeconds(.5)
+                        .strafeTo(new Vector2d(-57,58))
+                        .waitSeconds(.5)
+                        .strafeTo(new Vector2d(-57,12))
+                        .waitSeconds(.5)
+                        .lineTo(new Vector2d(-60))
+                        .waitSeconds(.5)
+                        .strafeTo(new Vector2d(-61,58))
                         .build());
 
 
