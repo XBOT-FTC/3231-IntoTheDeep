@@ -87,7 +87,7 @@ public class SpecimenCreationAuto extends LinearOpMode {
                 .strafeTo(new Vector2d(-47, 58))
                 .waitSeconds(.5)
                 .strafeTo(new Vector2d(-47,12))
-                .waitSeconds(.5)  
+                .waitSeconds(.5)
                 .strafeTo(new Vector2d(-57,12))
                 .waitSeconds(.5)
                 .strafeTo(new Vector2d(-57,58))
