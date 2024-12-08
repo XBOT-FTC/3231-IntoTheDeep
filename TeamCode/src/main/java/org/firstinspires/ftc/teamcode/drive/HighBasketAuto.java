@@ -23,7 +23,26 @@ public class HighBasketAuto extends LinearOpMode {
         ModLinearSlide slide = new ModLinearSlide(hardwareMap, DcMotorSimple.Direction.FORWARD);
         ModSwivel swivel = new ModSwivel(hardwareMap,DcMotorSimple.Direction.FORWARD);
         Pose2d startingPos = new Pose2d(-24,63, Math.toRadians(-90));
-
+//                .splineTo(new Vector2d(0,37), Math.toRadians(-90))
+//                .waitSeconds(1)
+//                .forward(-5)
+//                .splineTo(new Vector2d(-47, 47), Math.toRadians(90))
+//                .waitSeconds(1)
+//                .turn(Math.toRadians(180))
+//                .forward(15)
+//                .waitSeconds(1)
+//                .splineTo(new Vector2d(0,37), Math.toRadians(-90))
+//                .waitSeconds(1)
+//                .splineTo(new Vector2d(-58, 47), Math.toRadians(-90))
+//                .waitSeconds(1)
+//                .splineTo(new Vector2d(0,37), Math.toRadians(-90))
+//                .waitSeconds(1)
+//                .splineTo(new Vector2d(-47,62), Math.toRadians(90))
+//                .waitSeconds(1)
+//                .splineTo(new Vector2d(-56, 27), Math.toRadians(180))
+//                .waitSeconds(1)
+//                .splineTo(new Vector2d(-47,62), Math.toRadians(0))
+//                .waitSeconds(1);
         MecanumDrive drive = new MecanumDrive(hardwareMap,startingPos);
     }
 }

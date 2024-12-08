@@ -24,8 +24,8 @@ import org.firstinspires.ftc.teamcode.MecanumDrive;
 import org.firstinspires.ftc.teamcode.lib.ModLinearSlide;
 import org.firstinspires.ftc.teamcode.lib.ModSwivel;
 
-@Autonomous(name="Basket Auto", group="Auto")
-public class CompetitionRoadRunner extends LinearOpMode {
+@Autonomous(name="Specimen Auto", group="Auto")
+public class SpecimenCreationAuto extends LinearOpMode {
     /**
      * Override this method and place your code here.
      * <p>
@@ -57,7 +57,7 @@ public class CompetitionRoadRunner extends LinearOpMode {
         claw = new Claw(hardwareMap, telemetry);
 
         swivel = new ModSwivel(hardwareMap, DcMotorSimple.Direction.FORWARD);
-        swivel.setSwivelPower(.5 );
+        swivel.setSwivelPower(0.5);
         swivel.setMaxPosition(3000);
 
         linearSlide = new ModLinearSlide(hardwareMap, DcMotorSimple.Direction.FORWARD);
@@ -73,119 +73,32 @@ public class CompetitionRoadRunner extends LinearOpMode {
         linearSlide.setBasketPositionSwivel(1440);
 
 
-        Pose2d initialPose = new Pose2d(35.5, 63, Math.toRadians(360)); // TODO: CHANGE THIS
+        Pose2d initialPose = new Pose2d(-23, 63, Math.toRadians(180)); // TODO: CHANGE THIS
         MecanumDrive drive = new MecanumDrive(hardwareMap, initialPose);
 
         Action tab = drive.actionBuilder(initialPose)
-                .setTangent(Math.toRadians(360))
 
-                .strafeToLinearHeading(new Vector2d(35.5,62), Math.toRadians(360))
-
-                .splineToLinearHeading(new Pose2d(54.8, 54.8, Math.toRadians(45)), Math.toRadians(91))
-
-                .afterTime(.5, new InstantAction(() -> {
-                    swivelPosition = 1440;
-                }))
-                .afterTime(2.5, new InstantAction(() -> {
-                    slidePosition = 3600;
-                }))
-
-                .afterTime(5, new InstantAction(() -> {
-                    claw.open();
-                }))
-
-                .afterTime(5.5, new InstantAction(() -> {
-                    slidePosition = 0;
-                }))
-
-                .afterTime(7.9, new InstantAction(() -> {
-                    swivelPosition = 0;
-                })) // score preloaded piece
-
-                .waitSeconds(8)
-
-                .splineToLinearHeading(new Pose2d(50.75, 45, Math.toRadians(270)), Math.toRadians(89))
-
-                .waitSeconds(.3)
-
-                .lineToY(39.5)
-
-                .afterTime(.5, new InstantAction(() -> {
-                    claw.close(); // grab 1st piece
-                }))
-
-                .waitSeconds(.8)
-
-                .lineToY(45)
-
-                .waitSeconds(.3)
-
-                .splineToLinearHeading(new Pose2d(54.8, 54.8, Math.toRadians(45)), Math.toRadians(89))
-
-                .afterTime(.5, new InstantAction(() -> {
-                    swivelPosition = 1440;
-                }))
-                .afterTime(2.5, new InstantAction(() -> {
-                    slidePosition = 3600;
-                }))
-
-                .afterTime(5, new InstantAction(() -> {
-                    claw.open();
-                }))
-
-                .afterTime(5.5, new InstantAction(() -> {
-                    slidePosition = 0;
-                }))
-
-                .afterTime(7.9, new InstantAction(() -> {
-                    swivelPosition = 0;
-                })) // score 1st piece
-
-                .waitSeconds(8)
-
-                .splineToLinearHeading(new Pose2d(61.75, 45, Math.toRadians(270)), Math.toRadians(89))
-
-                .lineToY(39.5)
-
-                .afterTime(.5, new InstantAction(() -> {
-                    claw.close();
-                })) // grab 2nd piece
-
-                .waitSeconds(.8)
-
-                .splineToLinearHeading(new Pose2d(54, 54, Math.toRadians(45)), Math.toRadians(89))
-
-                .afterTime(.5, new InstantAction(() -> {
-                    swivelPosition = 1440;
-                }))
-                .afterTime(2.5, new InstantAction(() -> {
-                    slidePosition = 3600;
-                }))
-
-                .afterTime(5, new InstantAction(() -> {
-                    claw.open();
-                }))
-
-                .afterTime(5.5, new InstantAction(() -> {
-                    claw.close();
-                }))
-
-                .afterTime(6, new InstantAction(() -> {
-                    slidePosition = 0;
-                }))
-
-                .afterTime(8.4, new InstantAction(() -> {
-                    swivelPosition = 0;
-                }))  // score 2nd piece
-
-                .waitSeconds(8.5)
-
-                .turn(Math.toRadians(225))
+                .splineToLinearHeading(new Pose2d(-37,63,Math.toRadians(180)),Math.toRadians(180))
                 .waitSeconds(.5)
-                .splineToLinearHeading(new Pose2d(26, 12, Math.toRadians(180)), Math.toRadians(89))
-                .waitSeconds(.5) // park
-
+                .strafeTo(new Vector2d(-37,12))
+                .waitSeconds(.5)
+                .strafeTo(new Vector2d(-47,12))
+                .waitSeconds(.5)
+                .strafeTo(new Vector2d(-47, 58))
+                .waitSeconds(.5)
+                .strafeTo(new Vector2d(-47,12))
+                .waitSeconds(.5)  
+                .strafeTo(new Vector2d(-57,12))
+                .waitSeconds(.5)
+                .strafeTo(new Vector2d(-57,58))
+                .waitSeconds(.5)
+                .strafeTo(new Vector2d(-57,12))
+                .waitSeconds(.5)
+                .lineToX(-60)
+                .waitSeconds(.5)
+                .strafeTo(new Vector2d(-61,58))
                 .build();
+
 
         // Initialization
         while (!isStopRequested() && !opModeIsActive()) {
@@ -201,9 +114,7 @@ public class CompetitionRoadRunner extends LinearOpMode {
                 new SequentialAction(
                         initSystems(),
                         new ParallelAction(
-                                tab,
-                                slideMovement(telemetry),
-                                swivelMovement(telemetry)
+                                tab
                         )
 //                        Example
 //                        trajectoryActionChosen,
@@ -215,29 +126,29 @@ public class CompetitionRoadRunner extends LinearOpMode {
         );
     }
 
-public Action slideMovement(Telemetry telemetry) {
-    return new Action() {
-        private boolean initialized = false;
-        @Override
-        public boolean run(@NonNull TelemetryPacket packet) {
-            if (!initialized) {
-                initialized = true;
-            }
+    public Action slideMovement(Telemetry telemetry) {
+        return new Action() {
+            private boolean initialized = false;
+            @Override
+            public boolean run(@NonNull TelemetryPacket packet) {
+                if (!initialized) {
+                    initialized = true;
+                }
 
-            linearSlide.slideToPresetPositionAuto(slidePosition, telemetry);
-            telemetry.addData("Roadrunner, LinearSlide Current Position", linearSlide.linearSlideLeft.getCurrentPosition());
-            telemetry.addData("Roadrunner, LinearSlide Target Position", slidePosition);
-            telemetry.addData("Roadrunner, LinearSlide Power Position", linearSlide.linearSlideLeft.getPower());
+                linearSlide.slideToPresetPositionAuto(slidePosition, telemetry);
+                telemetry.addData("Roadrunner, LinearSlide Current Position", linearSlide.linearSlideLeft.getCurrentPosition());
+                telemetry.addData("Roadrunner, LinearSlide Target Position", slidePosition);
+                telemetry.addData("Roadrunner, LinearSlide Power Position", linearSlide.linearSlideLeft.getPower());
 //            if (Math.abs(linearSlide.linearSlideLeft.getCurrentPosition() - slidePosition) < 30
 //                    || Math.abs(linearSlide.linearSlideRight.getCurrentPosition() - slidePosition) < 30) {
 //                return false;
 //            }
-            return true;
-        }
-    };
-}
+                return true;
+            }
+        };
+    }
 
-public Action swivelMovement(Telemetry telemetry) {
+    public Action swivelMovement(Telemetry telemetry) {
         return new Action() {
             private boolean initialized = false;
             @Override

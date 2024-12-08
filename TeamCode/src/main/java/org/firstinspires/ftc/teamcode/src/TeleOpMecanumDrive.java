@@ -31,6 +31,7 @@ package org.firstinspires.ftc.teamcode.src;
 
 import com.arcrobotics.ftclib.kinematics.Odometry;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -76,9 +77,9 @@ public class TeleOpMecanumDrive {
         this.backLeftDrive = hardwareMap.get(DcMotor.class, "bl_drive");
         this.backRightDrive = hardwareMap.get(DcMotor.class, "br_drive");
 
-        this.frontLeftDrive.setDirection(DcMotor.Direction.REVERSE);
+        this.frontLeftDrive.setDirection(DcMotor.Direction.FORWARD);
         this.frontRightDrive.setDirection(DcMotor.Direction.FORWARD);
-        this.backLeftDrive.setDirection(DcMotor.Direction.REVERSE);
+        this.backLeftDrive.setDirection(DcMotor.Direction.FORWARD);
         this.backRightDrive.setDirection(DcMotor.Direction.FORWARD);
 
         this.frontLeftDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);

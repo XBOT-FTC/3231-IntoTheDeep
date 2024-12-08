@@ -16,5 +16,4 @@ public class ElectricalContract {
     public static String BackRightDrive(){
         return "rb_drive";
     }
-    // test test
 }
