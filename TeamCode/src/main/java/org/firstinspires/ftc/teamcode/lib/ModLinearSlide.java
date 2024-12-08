@@ -92,7 +92,11 @@ public class ModLinearSlide {
             }
         } else if (gamepad.right_trigger > 0) {
             manualPositionSlides -= tickChange;
-            manualPositionSlides = Math.max(manualPositionSlides, 0);
+            if (!swivel.getSwivelIsAtBasket(basketPositionSwivel, maxPositionSwivel)) {
+                manualPositionSlides = Math.max(maxPositionDownSlides, 0);
+            } else {
+                manualPositionSlides = Math.max(maxPosition, 0);
+            }
         }
 
         linearSlideLeft.setTargetPosition(-manualPositionSlides);
