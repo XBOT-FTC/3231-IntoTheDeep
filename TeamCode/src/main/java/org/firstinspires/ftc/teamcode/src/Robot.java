@@ -63,7 +63,7 @@ public class Robot extends LinearOpMode {
         linearSlide.setMaxPositionForDown(1300);
         linearSlide.setZeroPosition(0);
 
-        linearSlide.setTickChange(60);
+        linearSlide.setTickChange(40);
         linearSlide.setTickChangeSwivel(90);
 
 

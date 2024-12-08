@@ -108,7 +108,7 @@ public class CompetitionRoadRunner extends LinearOpMode {
 
                 .waitSeconds(.3)
 
-                .lineToY(39.5)
+                .lineToY(37.5)
 
                 .afterTime(.5, new InstantAction(() -> {
                     claw.close(); // grab 1st piece
@@ -145,7 +145,7 @@ public class CompetitionRoadRunner extends LinearOpMode {
 
                 .splineToLinearHeading(new Pose2d(61.75, 45, Math.toRadians(270)), Math.toRadians(89))
 
-                .lineToY(39.5)
+                .lineToY(37.5)
 
                 .afterTime(.5, new InstantAction(() -> {
                     claw.close();

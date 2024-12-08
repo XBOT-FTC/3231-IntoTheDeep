@@ -77,8 +77,8 @@ public class SpecimenCreationAuto extends LinearOpMode {
         MecanumDrive drive = new MecanumDrive(hardwareMap, initialPose);
 
         Action tab = drive.actionBuilder(initialPose)
-                .strafeTo(new Vector2d(-23,62))
-                .lineToX(-37)
+
+                .splineToLinearHeading(new Pose2d(-37,63,Math.toRadians(180)),Math.toRadians(180))
                 .waitSeconds(.5)
                 .strafeTo(new Vector2d(-37,12))
                 .waitSeconds(.5)
