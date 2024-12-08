@@ -93,9 +93,9 @@ public class ModLinearSlide {
         } else if (gamepad.right_trigger > 0) {
             manualPositionSlides -= tickChange;
             if (!swivel.getSwivelIsAtBasket(basketPositionSwivel, maxPositionSwivel)) {
-                manualPositionSlides = Math.max(maxPositionDownSlides, 0);
+                manualPositionSlides = Math.max(Math.min(maxPositionDownSlides, manualPositionSlides), 0);
             } else {
-                manualPositionSlides = Math.max(maxPosition, 0);
+                manualPositionSlides = Math.max(Math.min(maxPosition, manualPositionSlides), 0);
             }
         }
 
@@ -203,15 +203,15 @@ public class ModLinearSlide {
                 positionPreset = specimenPositionSlides;
             }
         } else {
-                if (!manualMode) {
-                    telemetry.addLine("No button press ");
-                    positionPreset = zeroPosition;
-                    if (linearSlideLeft.getCurrentPosition() >= -thresholdDown ||
-                            linearSlideRight.getCurrentPosition() >= -thresholdDown) {
-                        swivel.swivelToPresetPosition(zeroPosition, telemetry);
-                    }
+            if (!manualMode) {
+                telemetry.addLine("No button press ");
+                positionPreset = zeroPosition;
+                if (linearSlideLeft.getCurrentPosition() >= -thresholdDown ||
+                        linearSlideRight.getCurrentPosition() >= -thresholdDown) {
+                    swivel.swivelToPresetPosition(zeroPosition, telemetry);
                 }
             }
+        }
 
         return positionPreset;
     }
@@ -361,5 +361,4 @@ public class ModLinearSlide {
     }
 
 }
-
 
