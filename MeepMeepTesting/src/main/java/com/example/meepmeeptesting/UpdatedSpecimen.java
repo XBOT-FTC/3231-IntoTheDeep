@@ -14,7 +14,7 @@ public class UpdatedSpecimen {
         RoadRunnerBotEntity myBot = new DefaultBotBuilder(meepMeep)
                 // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
                 .setConstraints(60, 60, Math.toRadians(180), Math.toRadians(90), 15)
-                .followTrajectorySequence(drive -> drive.trajectorySequenceBuilder(new Pose2d(-24, 63, Math.toRadians(-90))) // right here is where u plug the starting coordinates points
+                .followTrajectorySequence(drive -> drive.trajectorySequenceBuilder(new Pose2d(-23, 63, Math.toRadians(-90))) // right here is where u plug the starting coordinates points
                         .splineTo(new Vector2d(0,37), Math.toRadians(-90))
                         .waitSeconds(1)
                         .forward(-5)
