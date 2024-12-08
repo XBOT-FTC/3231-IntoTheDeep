@@ -86,6 +86,11 @@ public class ModSwivel {
         return swivel.getCurrentPosition();
     }
 
+    public boolean getSwivelIsAtBasket(int basketPosition, int maxPosition) {
+        return Math.abs(swivel.getCurrentPosition() - basketPosition) <= 25 ||
+                Math.abs(swivel.getCurrentPosition() - maxPosition) <= maxPosition - basketPosition;
+    }
+
 //    public void actualSetTargetPosition(int scoringPosition, Telemetry telemetry) {
 //        swivel.setTargetPosition(scoringPosition);
 //        swivel.setMode(DcMotor.RunMode.RUN_TO_POSITION);

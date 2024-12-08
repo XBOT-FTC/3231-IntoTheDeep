@@ -80,12 +80,13 @@ public class ModLinearSlide {
         return manualMode;
     }
 
-    public void slidesManual(Gamepad gamepad, Telemetry telemetry, boolean swivelIsZero) {
+    public void slidesManual(Gamepad gamepad, Telemetry telemetry, ModSwivel swivel) {
         if (gamepad.left_trigger > 0) {
-            if (swivelIsZero) {
+            if (!swivel.getSwivelIsAtBasket(basketPositionSwivel, maxPositionSwivel)) {
                 manualPositionSlides += tickChange;
                 manualPositionSlides = Math.min(manualPositionSlides, maxPositionDownSlides);
             } else {
+                telemetry.addLine("ELSE ELSE ELSE ELSE ELSE ELSE ELSE");
                 manualPositionSlides += tickChange;
                 manualPositionSlides = Math.min(manualPositionSlides, maxPosition);
             }
@@ -110,6 +111,7 @@ public class ModLinearSlide {
 
         int currentPositionLeft = linearSlideLeft.getCurrentPosition();
         int currentPositionRight = linearSlideRight.getCurrentPosition();
+        telemetry.addData("Swivel at Basket Position", swivel.getSwivelIsAtBasket(basketPositionSwivel, maxPositionSwivel));
         telemetry.addData("Current Left Slide Position", currentPositionLeft);
         telemetry.addData("Current Right Slide Position", currentPositionRight);
         telemetry.addData("Target Left Slide Position", linearSlideLeft.getTargetPosition());
@@ -212,7 +214,7 @@ public class ModLinearSlide {
 
     public void slideToPresetPosition(int scoringPosition, Telemetry telemetry, boolean isSwivelCheck, Gamepad gamepad, ModSwivel swivel) {
         if (manualMode) {
-            slidesManual(gamepad, telemetry, isSwivelCheck);
+            slidesManual(gamepad, telemetry, swivel);
             swivelManual(gamepad, swivel, telemetry);
         } else {
             linearSlideLeft.setTargetPosition(-scoringPosition);
