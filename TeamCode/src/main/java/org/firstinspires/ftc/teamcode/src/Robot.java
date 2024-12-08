@@ -35,7 +35,7 @@ public class Robot extends LinearOpMode {
 //        swivel.setZeroPosition(0);
 
         ModSwivel swivel = new ModSwivel(hardwareMap, DcMotorSimple.Direction.FORWARD);
-        swivel.setSwivelPower(0.5);
+        swivel.setSwivelPower(0.4);
         swivel.setMaxPosition(3000);
 
 
@@ -60,7 +60,7 @@ public class Robot extends LinearOpMode {
         linearSlide.setSpecimenPositionSwivel(1400);
         linearSlide.setBasketPositionSwivel(1440);
 
-        linearSlide.setMaxPositionForDown(2775);
+        linearSlide.setMaxPositionForDown(1300);
         linearSlide.setZeroPosition(0);
 
         linearSlide.setTickChange(60);

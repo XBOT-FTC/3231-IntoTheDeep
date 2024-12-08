@@ -66,6 +66,7 @@ public class ModSwivel {
         telemetry.addData("Swivel Goal/Target Position", scoringPosition);
         telemetry.addData("Swivel Power", power);
         telemetry.addData("Actual Power", swivel.getPower());
+        telemetry.update();
     }
 
 
@@ -83,6 +84,11 @@ public class ModSwivel {
 
     public int getSwivelPosition() {
         return swivel.getCurrentPosition();
+    }
+
+    public boolean getSwivelIsAtBasket(int basketPosition, int maxPosition) {
+        return Math.abs(swivel.getCurrentPosition() - basketPosition) <= 25 ||
+                Math.abs(swivel.getCurrentPosition() - maxPosition) <= maxPosition - basketPosition;
     }
 
 //    public void actualSetTargetPosition(int scoringPosition, Telemetry telemetry) {

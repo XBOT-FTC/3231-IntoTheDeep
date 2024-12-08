@@ -57,7 +57,7 @@ public class CompetitionRoadRunner extends LinearOpMode {
         claw = new Claw(hardwareMap, telemetry);
 
         swivel = new ModSwivel(hardwareMap, DcMotorSimple.Direction.FORWARD);
-        swivel.setSwivelPower(0.5);
+        swivel.setSwivelPower(.5 );
         swivel.setMaxPosition(3000);
 
         linearSlide = new ModLinearSlide(hardwareMap, DcMotorSimple.Direction.FORWARD);
@@ -73,128 +73,112 @@ public class CompetitionRoadRunner extends LinearOpMode {
         linearSlide.setBasketPositionSwivel(1440);
 
 
-        Pose2d initialPose = new Pose2d(24, 63, Math.toRadians(270)); // TODO: CHANGE THIS
+        Pose2d initialPose = new Pose2d(35.5, 63, Math.toRadians(360)); // TODO: CHANGE THIS
         MecanumDrive drive = new MecanumDrive(hardwareMap, initialPose);
 
         Action tab = drive.actionBuilder(initialPose)
-                .setTangent(Math.toRadians(270))
+                .setTangent(Math.toRadians(360))
 
-                .splineToLinearHeading(new Pose2d(54, 54, Math.toRadians(45)), Math.toRadians(91))
+                .strafeToLinearHeading(new Vector2d(35.5,62), Math.toRadians(360))
+
+                .splineToLinearHeading(new Pose2d(54.8, 54.8, Math.toRadians(45)), Math.toRadians(91))
 
                 .afterTime(.5, new InstantAction(() -> {
                     swivelPosition = 1440;
                 }))
-                .afterTime(5.5, new InstantAction(() -> {
+                .afterTime(2.5, new InstantAction(() -> {
                     slidePosition = 3600;
                 }))
 
-                .afterTime(10.5, new InstantAction(() -> {
+                .afterTime(5, new InstantAction(() -> {
                     claw.open();
                 }))
 
-                .afterTime(11, new InstantAction(() -> {
-                    claw.close();
-                }))
-
-                .afterTime(11.5, new InstantAction(() -> {
+                .afterTime(5.5, new InstantAction(() -> {
                     slidePosition = 0;
                 }))
 
-                .afterTime(16.5, new InstantAction(() -> {
+                .afterTime(7.9, new InstantAction(() -> {
                     swivelPosition = 0;
                 })) // score preloaded piece
 
-                .waitSeconds(23)
+                .waitSeconds(8)
 
-                .splineToLinearHeading(new Pose2d(49, 45, Math.toRadians(270)), Math.toRadians(89))
+                .splineToLinearHeading(new Pose2d(50.75, 45, Math.toRadians(270)), Math.toRadians(89))
 
-                .lineToY(38)
+                .waitSeconds(.3)
 
-                .afterTime(0, new InstantAction(() -> {
-                    claw.open();
-                }))
+                .lineToY(39.5)
 
-                .afterTime(1, new InstantAction(() -> {
+                .afterTime(.5, new InstantAction(() -> {
                     claw.close(); // grab 1st piece
                 }))
 
-                .waitSeconds(1.5)
+                .waitSeconds(.8)
 
                 .lineToY(45)
 
-                .splineToLinearHeading(new Pose2d(54, 54, Math.toRadians(45)), Math.toRadians(89))
-                .waitSeconds(.5)
+                .waitSeconds(.3)
 
-                .afterTime(5, new InstantAction(() -> {
-                    slidePosition = 1440;
+                .splineToLinearHeading(new Pose2d(54.8, 54.8, Math.toRadians(45)), Math.toRadians(89))
+
+                .afterTime(.5, new InstantAction(() -> {
+                    swivelPosition = 1440;
+                }))
+                .afterTime(2.5, new InstantAction(() -> {
+                    slidePosition = 3600;
                 }))
 
                 .afterTime(5, new InstantAction(() -> {
-                    slidePosition = 1440;
-                }))
-
-                .afterTime(4, new InstantAction(() -> {
                     claw.open();
                 }))
 
-                .afterTime(1, new InstantAction(() -> {
-                    claw.close();
-                }))
-
-                .afterTime(5, new InstantAction(() -> {
+                .afterTime(5.5, new InstantAction(() -> {
                     slidePosition = 0;
                 }))
 
-                .afterTime(5, new InstantAction(() -> {
-                    slidePosition = 0;
+                .afterTime(7.9, new InstantAction(() -> {
+                    swivelPosition = 0;
                 })) // score 1st piece
 
-                .waitSeconds(6.5)
+                .waitSeconds(8)
 
-                .splineToLinearHeading(new Pose2d(59, 45, Math.toRadians(270)), Math.toRadians(89))
-                .lineToY(38)
+                .splineToLinearHeading(new Pose2d(61.75, 45, Math.toRadians(270)), Math.toRadians(89))
 
-                .afterTime(0, new InstantAction(() -> {
-                    claw.open();
-                }))
+                .lineToY(39.5)
 
-                .afterTime(1, new InstantAction(() -> {
+                .afterTime(.5, new InstantAction(() -> {
                     claw.close();
                 })) // grab 2nd piece
 
-                .waitSeconds(1.5)
+                .waitSeconds(.8)
 
                 .splineToLinearHeading(new Pose2d(54, 54, Math.toRadians(45)), Math.toRadians(89))
-                .waitSeconds(.5)
 
-                .afterTime(5, new InstantAction(() -> {
-                    slidePosition = 1440;
+                .afterTime(.5, new InstantAction(() -> {
+                    swivelPosition = 1440;
+                }))
+                .afterTime(2.5, new InstantAction(() -> {
+                    slidePosition = 3600;
                 }))
 
                 .afterTime(5, new InstantAction(() -> {
-                    slidePosition = 1440;
-                }))
-
-                .afterTime(4, new InstantAction(() -> {
                     claw.open();
                 }))
 
-                .afterTime(1, new InstantAction(() -> {
+                .afterTime(5.5, new InstantAction(() -> {
                     claw.close();
                 }))
 
-                .lineToY(52)
-                .lineToX(52)
-
-                .afterTime(5, new InstantAction(() -> {
+                .afterTime(6, new InstantAction(() -> {
                     slidePosition = 0;
                 }))
 
-                .afterTime(5, new InstantAction(() -> {
-                    slidePosition = 0;
-                })) // score 2nd piece
+                .afterTime(8.4, new InstantAction(() -> {
+                    swivelPosition = 0;
+                }))  // score 2nd piece
 
-                .waitSeconds(6.5)
+                .waitSeconds(8.5)
 
                 .turn(Math.toRadians(225))
                 .waitSeconds(.5)
@@ -202,7 +186,6 @@ public class CompetitionRoadRunner extends LinearOpMode {
                 .waitSeconds(.5) // park
 
                 .build();
-
 
         // Initialization
         while (!isStopRequested() && !opModeIsActive()) {

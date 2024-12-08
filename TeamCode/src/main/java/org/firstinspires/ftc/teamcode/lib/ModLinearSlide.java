@@ -36,7 +36,7 @@ public class ModLinearSlide {
     public int zeroPosition = 0;
 
     public int thresholdUp = 110;
-    public int thresholdDown = 175;
+    public int thresholdDown = 300;
     public int tickChange = 0;
     public int tickChangeSwivel = 0;
 
@@ -59,7 +59,6 @@ public class ModLinearSlide {
         linearSlideRight.setTargetPosition(0);
         linearSlideRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         linearSlideRight.setDirection(direction.inverted());
-
     }
 
     public void slide(Gamepad gamepad, Telemetry telemetry, boolean swivelIsZero, ModSwivel swivel) {
@@ -81,12 +80,13 @@ public class ModLinearSlide {
         return manualMode;
     }
 
-    public void slidesManual(Gamepad gamepad, Telemetry telemetry, boolean swivelIsZero) {
+    public void slidesManual(Gamepad gamepad, Telemetry telemetry, ModSwivel swivel) {
         if (gamepad.left_trigger > 0) {
-            if (swivelIsZero) {
+            if (!swivel.getSwivelIsAtBasket(basketPositionSwivel, maxPositionSwivel)) {
                 manualPositionSlides += tickChange;
                 manualPositionSlides = Math.min(manualPositionSlides, maxPositionDownSlides);
             } else {
+                telemetry.addLine("ELSE ELSE ELSE ELSE ELSE ELSE ELSE");
                 manualPositionSlides += tickChange;
                 manualPositionSlides = Math.min(manualPositionSlides, maxPosition);
             }
@@ -111,6 +111,7 @@ public class ModLinearSlide {
 
         int currentPositionLeft = linearSlideLeft.getCurrentPosition();
         int currentPositionRight = linearSlideRight.getCurrentPosition();
+        telemetry.addData("Swivel at Basket Position", swivel.getSwivelIsAtBasket(basketPositionSwivel, maxPositionSwivel));
         telemetry.addData("Current Left Slide Position", currentPositionLeft);
         telemetry.addData("Current Right Slide Position", currentPositionRight);
         telemetry.addData("Target Left Slide Position", linearSlideLeft.getTargetPosition());
@@ -198,22 +199,22 @@ public class ModLinearSlide {
                 positionPreset = specimenPositionSlides;
             }
         } else {
-            if (!manualMode) {
-                telemetry.addLine("No button press ");
-                positionPreset = zeroPosition;
-                if (linearSlideLeft.getCurrentPosition() >= -thresholdDown ||
-                        linearSlideRight.getCurrentPosition() >= -thresholdDown) {
-                    swivel.swivelToPresetPosition(zeroPosition, telemetry);
+                if (!manualMode) {
+                    telemetry.addLine("No button press ");
+                    positionPreset = zeroPosition;
+                    if (linearSlideLeft.getCurrentPosition() >= -thresholdDown ||
+                            linearSlideRight.getCurrentPosition() >= -thresholdDown) {
+                        swivel.swivelToPresetPosition(zeroPosition, telemetry);
+                    }
                 }
             }
-        }
 
         return positionPreset;
     }
 
     public void slideToPresetPosition(int scoringPosition, Telemetry telemetry, boolean isSwivelCheck, Gamepad gamepad, ModSwivel swivel) {
         if (manualMode) {
-            slidesManual(gamepad, telemetry, isSwivelCheck);
+            slidesManual(gamepad, telemetry, swivel);
             swivelManual(gamepad, swivel, telemetry);
         } else {
             linearSlideLeft.setTargetPosition(-scoringPosition);
