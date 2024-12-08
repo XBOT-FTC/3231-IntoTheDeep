@@ -35,7 +35,8 @@ public class Specimen {
                         .waitSeconds(.5)
                         .lineTo(new Vector2d(-60))
                         .waitSeconds(.5)
-                        .strafeTo(new Vector2d(-61,58))
+                        .strafeTo(new Vector2d(-62,58))
+                        .strafeTo(new Vector2d(-62,48))
                         .build());
 
 

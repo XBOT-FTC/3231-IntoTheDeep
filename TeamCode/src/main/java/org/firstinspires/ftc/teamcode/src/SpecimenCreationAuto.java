@@ -96,7 +96,10 @@ public class SpecimenCreationAuto extends LinearOpMode {
                 .waitSeconds(.5)
                 .lineToX(-60)
                 .waitSeconds(.5)
+                //this is pushing to the observation zone
                 .strafeTo(new Vector2d(-61,58))
+                .strafeTo(new Vector2d(-61,48))
+                .waitSeconds(.5)
                 .build();
 
 
