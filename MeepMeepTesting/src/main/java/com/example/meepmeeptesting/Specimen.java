@@ -16,6 +16,7 @@ public class Specimen {
                 .setConstraints(60, 60, Math.toRadians(180), Math.toRadians(90), 15)
                 .followTrajectorySequence(drive -> drive.trajectorySequenceBuilder(new Pose2d(-24, 63, Math.toRadians(180))) // right here is where u plug the starting coordinates points
 
+                        .strafeTo(new Vector2d(-24,62))
                         .lineTo(new Vector2d(-37,63))
                         .waitSeconds(.5)
                         .strafeTo(new Vector2d(-37,12))
