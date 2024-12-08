@@ -77,9 +77,9 @@ public class TeleOpMecanumDrive {
         this.backLeftDrive = hardwareMap.get(DcMotor.class, "bl_drive");
         this.backRightDrive = hardwareMap.get(DcMotor.class, "br_drive");
 
-        this.frontLeftDrive.setDirection(DcMotor.Direction.FORWARD);
+        this.frontLeftDrive.setDirection(DcMotor.Direction.REVERSE);
         this.frontRightDrive.setDirection(DcMotor.Direction.FORWARD);
-        this.backLeftDrive.setDirection(DcMotor.Direction.FORWARD);
+        this.backLeftDrive.setDirection(DcMotor.Direction.REVERSE);
         this.backRightDrive.setDirection(DcMotor.Direction.FORWARD);
 
         this.frontLeftDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
