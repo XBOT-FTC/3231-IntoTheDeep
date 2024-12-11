@@ -188,6 +188,9 @@ public class ModLinearSlide {
 //
 //    }
 
+
+
+// testing push
     public int setScoringPosition(Gamepad gamepad, ModSwivel swivel, Telemetry telemetry) {
         // ---- BASKET ----
         if (gamepad.dpad_up) {
@@ -213,6 +216,8 @@ public class ModLinearSlide {
             }
         }
 
+        // RAH
+//etestsfjksdfkadsfds sadkfsfjasdf; tesing!!
         return positionPreset;
     }
 
